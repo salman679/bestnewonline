@@ -1,11 +1,3 @@
-import logo from "../assets/logo.png";
-import {
-  FaTruck,
-  FaHeadset,
-  FaShieldAlt,
-  FaCreditCard,
-  FaInstagram,
-} from "react-icons/fa";
 import { useContext, useState } from "react";
 import { axiosInstance } from "../lib/axiosInstanace";
 import Swal from "sweetalert2";
@@ -16,54 +8,6 @@ const Footer = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const { siteSettings } = useContext(IndexContext);
-
-  const handleSubscribe = async (e) => {
-    e.preventDefault();
-
-    if (!email) {
-      Swal.fire({
-        title: "Error!",
-        text: "Please enter your email address",
-        icon: "error",
-        confirmButtonColor: "#3085d6",
-      });
-      return;
-    }
-
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      Swal.fire({
-        title: "Invalid Email!",
-        text: "Please enter a valid email address",
-        icon: "error",
-        confirmButtonColor: "#3085d6",
-      });
-      return;
-    }
-
-    setLoading(true);
-    try {
-      await axiosInstance.post("/newsletter", { email });
-
-      Swal.fire({
-        title: "Success!",
-        text: "Thank you for subscribing to our newsletter!",
-        icon: "success",
-        confirmButtonColor: "#3085d6",
-      });
-
-      setEmail("");
-    } catch (error) {
-      console.error("Newsletter subscription error:", error);
-      Swal.fire({
-        title: "Error!",
-        text: "Failed to subscribe. Please try again later.",
-        icon: "error",
-        confirmButtonColor: "#3085d6",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <>
@@ -82,7 +26,7 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <Link to={"/"}>
-              <img src="/public/logo.png" alt="logo" className="w-28 mb-6" />
+              <img src="/logo.png" alt="logo" className="w-28 mb-6" />
             </Link>
             <p
               className="text-small bangla leading-relaxed mb-6"
