@@ -155,7 +155,7 @@ const Navbar = () => {
             {/* Logo - Left */}
             <Link to={"/"} className="flex-shrink-0">
               <img
-                src="/public/logo.png"
+                src="/logo.png"
                 alt="BuyNest"
                 className="max-[640px]:w-24"
                 style={{ height: "40px", width: "auto" }}
