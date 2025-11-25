@@ -1,18 +1,16 @@
-
 import { initializeApp } from "firebase/app";
 
-
 const firebaseConfig = {
-  apiKey: "AIzaSyBJofeL2Jjck7iI_1EcMOk0jCj1WkQlzOY",
-  authDomain: "buynestonline-82eeb.firebaseapp.com",
-  projectId: "buynestonline-82eeb",
-  storageBucket: "buynestonline-82eeb.firebasestorage.app",
-  messagingSenderId: "303962646327",
-  appId: "1:303962646327:web:66e2f74e7d9e80dd8b9cb2",
-  measurementId: "G-XLDC2L778L"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-export { app }
+export { app };
