@@ -1,0 +1,106 @@
+.rti--container {
+  --rti-bg: "#fff",
+    --rti-border: "#ccc",
+    --rti-main: "#3182ce",
+    --rti-radius: "0.375rem",
+    --rti-s: "0.5rem",
+    /* spacing */
+    --rti-tag: "#edf2f7",
+    --rti-tag-remove: "#e53e3e",
+}
+
+/* Quill Editor Styles */
+.ql-toolbar {
+  background-color: #fff;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  border-color: #e5e7eb;
+}
+
+.dark .ql-toolbar {
+  background-color: #1f2937;
+  border-color: #4b5563;
+}
+
+.ql-container {
+  background-color: #fff;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  border-color: #e5e7eb;
+  font-family: inherit;
+  font-size: 1rem;
+  height: 200px !important;
+}
+
+.dark .ql-container {
+  background-color: #1f2937;
+  border-color: #4b5563;
+  color: #fff;
+}
+
+.ql-editor {
+  min-height: 200px;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.dark .ql-editor {
+  color: #fff;
+}
+
+/* Toolbar button styles */
+.ql-formats button {
+  color: #374151;
+}
+
+.dark .ql-formats button {
+  color: #9ca3af;
+}
+
+.ql-formats button:hover {
+  color: #000;
+}
+
+.dark .ql-formats button:hover {
+  color: #fff;
+}
+
+/* Active state for toolbar buttons */
+.ql-formats button.ql-active,
+.ql-formats .ql-picker-label.ql-active {
+  color: #016737;
+}
+
+.dark .ql-formats button.ql-active,
+.dark .ql-formats .ql-picker-label.ql-active {
+  color: #016737;
+}
+
+/* Dropdown styles */
+.ql-picker {
+  color: #374151;
+}
+
+.dark .ql-picker {
+  color: #9ca3af;
+}
+
+.ql-picker-options {
+  background-color: #fff;
+  border-color: #e5e7eb;
+}
+
+.dark .ql-picker-options {
+  background-color: #1f2937;
+  border-color: #4b5563;
+}
+
+/* Fix for Quill editor height in container */
+.quill {
+  height: auto !important;
+}
+
+.quill > .ql-container {
+  height: 200px !important;
+}

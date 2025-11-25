@@ -1,0 +1,616 @@
+@import "tailwindcss";
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --website-bg-color: #016737;
+  --website-bg-hover-color: #034425;
+
+  /* Ultra Minimal Color Palette */
+  --color-primary: #016737;
+  --color-primary-hover: #034425;
+  --color-bg-main: #ffffff;
+  --color-bg-white: #ffffff;
+  --color-bg-soft: #f9fafb;
+  --color-bg-light: #f3f4f6;
+  --color-text-primary: #111827;
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #9ca3af;
+  --color-border: #e5e7eb;
+  --color-border-light: #f3f4f6;
+
+  /* Spacing System */
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-white);
+}
+
+/* Apply Hind Siliguri to all Bangla text globally - HIGHEST PRIORITY */
+*:lang(bn),
+*.bangla,
+*.bangla-text,
+*[lang="bn"],
+.bangla *,
+.bangla-text *,
+h1.bangla,
+h2.bangla,
+h3.bangla,
+h4.bangla,
+h5.bangla,
+h6.bangla,
+p.bangla,
+span.bangla,
+div.bangla,
+a.bangla,
+button.bangla,
+input.bangla,
+textarea.bangla,
+label.bangla {
+  font-family: "Hind Siliguri", sans-serif !important;
+}
+
+/* ============================================
+   TYPOGRAPHY SYSTEM
+   Hind Siliguri (Bangla) + Inter (English)
+============================================ */
+
+/* Bangla Typography - Hind Siliguri */
+.font-bangla,
+[lang="bn"],
+.bangla-text {
+  font-family: "Hind Siliguri", sans-serif;
+}
+
+/* English Typography - Inter */
+.font-english,
+[lang="en"],
+.english-text {
+  font-family: "Inter", sans-serif;
+}
+
+/* Heading Styles - H1 */
+.heading-1 {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.heading-1.bangla {
+  font-family: "Hind Siliguri", sans-serif;
+  font-size: 36px;
+}
+
+@media (max-width: 640px) {
+  .heading-1 {
+    font-size: 32px;
+  }
+  .heading-1.bangla {
+    font-size: 28px;
+  }
+}
+
+/* Heading Styles - H2 */
+.heading-2 {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.heading-2.bangla {
+  font-family: "Hind Siliguri", sans-serif;
+  font-size: 26px;
+}
+
+@media (max-width: 640px) {
+  .heading-2 {
+    font-size: 24px;
+  }
+  .heading-2.bangla {
+    font-size: 22px;
+  }
+}
+
+/* Heading Styles - H3 */
+.heading-3 {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.heading-3.bangla {
+  font-family: "Hind Siliguri", sans-serif;
+  font-size: 20px;
+}
+
+@media (max-width: 640px) {
+  .heading-3 {
+    font-size: 18px;
+  }
+  .heading-3.bangla {
+    font-size: 18px;
+  }
+}
+
+/* Body Text */
+.body-text {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.body-text.bangla {
+  font-family: "Hind Siliguri", sans-serif;
+  font-size: 17px;
+}
+
+/* Small Text */
+.text-small {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.text-small.bangla {
+  font-family: "Hind Siliguri", sans-serif;
+}
+
+/* Button Text */
+.btn-text {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.btn-text.bangla {
+  font-family: "Hind Siliguri", sans-serif;
+  font-weight: 600;
+}
+
+/* Price Text */
+.price-text {
+  font-size: 20px;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+}
+
+@media (max-width: 640px) {
+  .price-text {
+    font-size: 18px;
+  }
+}
+
+.input-field {
+  @apply w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition;
+}
+
+.textColor {
+  color: var(--website-bg-color);
+}
+
+.textColor600 {
+  color: var(--website-bg-hover-color);
+}
+
+.bgColor {
+  background-color: var(--website-bg-color);
+
+  &:hover {
+    background-color: var(--website-bg-hover-color);
+  }
+}
+
+.rc-slider-track {
+  background-color: #194d4e !important;
+}
+
+.rc-slider-handle {
+  background-color: #194d4e !important;
+  border: #194d4e !important;
+}
+
+.scrollbar-hidden {
+  overflow-y: auto;
+  /* Enables vertical scrolling when needed */
+  scrollbar-width: 10px;
+  /* Hides scrollbar in Firefox */
+  -ms-overflow-style: none;
+  /* Hides scrollbar in IE and Edge */
+
+  /* Hides scrollbar for WebKit browsers (Chrome, Safari) */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+:root {
+  --color-primary: #your-primary-color;
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+/* Existing styles... */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Description section styles */
+.description-section {
+  transition: all 0.3s ease;
+}
+
+.description-section button {
+  position: relative;
+  overflow: hidden;
+}
+
+.description-section button::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: currentColor;
+  transition: width 0.3s ease;
+}
+
+.description-section button:hover::after {
+  width: 100%;
+}
+
+/* Premium smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Premium shadows */
+.shadow-premium {
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-premium-lg {
+  box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.15);
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--website-bg-color);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Custom selection color */
+::selection {
+  background-color: var(--website-bg-color);
+  color: white;
+}
+
+/* Smooth image loading */
+img {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Premium gradient backgrounds */
+.gradient-premium {
+  background: linear-gradient(135deg, #016737 0%, #034425 100%);
+}
+
+/* Glassmorphism effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Premium button hover effect */
+.btn-premium {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-premium::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-premium:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Smooth card hover */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+}
+
+/* ============================================
+   ULTRA-MINIMAL DESIGN SYSTEM
+============================================ */
+
+/* Ultra Minimal Card */
+.card-minimal {
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 14px 10px 40px 8px #7090b014;
+}
+
+.card-minimal:hover {
+  border-color: var(--color-border);
+  box-shadow: 14px 10px 40px 8px #7090b014;
+}
+
+/* Minimal Button Styles */
+.btn-minimal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-minimal.bangla,
+.btn-minimal.bangla-text {
+  font-family: "Hind Siliguri", sans-serif;
+}
+
+.btn-minimal.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-minimal.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 14px 10px 40px 8px #7090b014;
+}
+
+.btn-minimal.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.btn-minimal.btn-outline:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Ultra Minimal Shadows - Custom Blue */
+.shadow-minimal {
+  box-shadow: 14px 10px 40px 8px #7090b014;
+}
+
+.shadow-minimal-hover:hover {
+  box-shadow: 14px 10px 40px 8px #7090b014;
+}
+
+/* Spacing Utilities */
+.container-minimal {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: var(--space-lg);
+  padding-right: var(--space-lg);
+}
+
+@media (max-width: 640px) {
+  .container-minimal {
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+  }
+}
+
+/* Section Spacing */
+.section-spacing {
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-2xl);
+}
+
+@media (max-width: 640px) {
+  .section-spacing {
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-xl);
+  }
+}
+
+/* Clean Divider */
+.divider-minimal {
+  height: 1px;
+  background-color: var(--color-border);
+  border: none;
+  margin: var(--space-xl) 0;
+}
+
+/* Product Grid Minimal */
+.product-grid-minimal {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+@media (max-width: 1024px) {
+  .product-grid-minimal {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+}
+
+@media (max-width: 768px) {
+  .product-grid-minimal {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+}
+
+/* Image Aspect Ratio */
+.aspect-square {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+/* Clean Badge */
+.badge-minimal {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  background-color: var(--color-bg-light);
+  color: var(--color-text-secondary);
+}
+
+/* Input Minimal */
+.input-minimal {
+  font-family: "Inter", sans-serif;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  transition: all 0.2s;
+  background-color: white;
+}
+
+.input-minimal:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(1, 103, 55, 0.1);
+}
+
+/* Text Alignment */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* ============================================
+   LOADING ANIMATIONS
+============================================ */
+
+/* Modern Spinner Animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Shimmer Animation for Skeleton Loading */
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ============================================
+   SWIPER CUSTOMIZATION
+============================================ */
+
+/* Allow shadows to spread in Related Products Swiper */
+.related-products-swiper .swiper-wrapper {
+  padding: 16px 8px 40px !important;
+}
+
+.related-products-swiper {
+  overflow: visible !important;
+}
+
+.related-products-swiper .swiper-slide {
+  height: auto;
+}

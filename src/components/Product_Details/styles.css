@@ -1,0 +1,185 @@
+/* Product Details Styles */
+
+:root {
+  --website-bg-color: #016737;
+}
+
+/* Image Gallery Animations */
+.image-gallery-slide {
+  transition: transform 0.3s ease-in-out;
+}
+
+.image-gallery-slide:hover {
+  transform: scale(1.02);
+}
+
+/* Zoom Effect on Main Product Image */
+.product-main-image {
+  transition: transform 0.5s ease;
+}
+
+.product-main-image-container:hover .product-main-image {
+  transform: scale(1.1);
+}
+
+/* Smooth Transitions for Color and Size Selection */
+.variant-option {
+  transition: all 0.3s ease;
+}
+
+.variant-option:hover {
+  transform: translateY(-2px);
+}
+
+/* Price Animation */
+.price-tag {
+  animation: priceFloat 2s ease-in-out infinite;
+}
+
+@keyframes priceFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Add to Cart Button Animation */
+.add-to-cart-btn {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.add-to-cart-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+.add-to-cart-btn:hover::after {
+  left: 100%;
+}
+
+/* Quantity Input Styling */
+.quantity-input {
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.quantity-input:focus {
+  border-color: #0a0806;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+}
+
+/* Description Section Animations */
+.description-section {
+  transition: all 0.3s ease;
+}
+
+.description-section:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Related Products Card Hover Effects */
+.related-product-card {
+  transition: all 0.3s ease;
+}
+
+.related-product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Wishlist Button Animation */
+.wishlist-btn {
+  transition: all 0.3s ease;
+}
+
+.wishlist-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Social Share Buttons */
+.social-share-btn {
+  transition: all 0.3s ease;
+}
+
+.social-share-btn:hover {
+  transform: rotate(10deg);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--website-bg-color);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--website-bg-color)
+}
+
+/* Loading Skeleton Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Toast Notifications */
+.toast-notification {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design Helpers */
+@media (max-width: 640px) {
+  .mobile-optimized {
+    font-size: 90%;
+    padding: 0.75rem;
+  }
+}
+
+/* Dark Mode Transitions */
+.dark-mode-transition {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
