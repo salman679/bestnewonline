@@ -249,7 +249,7 @@ const App = () => {
         href={siteSettings?.socialMedia?.whatsAppLink}
         target="_blank"
         rel="noreferrer noopener"
-        className={`fixed bottom-12 right-4 z-50 inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#25d366] ${
+        className={`fixed bottom-28 right-4 z-50 inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#25d366] ${
           adminRoute === "/admin-dashboard" ? "hidden" : ""
         }`}
       >

@@ -64,14 +64,14 @@ const SidebarCart = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 20 }}
-              className={`fixed top-0 right-0 z-[1000] w-full max-w-[400px] h-screen bg-white dark:bg-gray-900 shadow-2xl 
+              className={`fixed top-0 right-0 z-[9999] w-full max-w-[400px] h-[100dvh] bg-white dark:bg-gray-900 shadow-2xl 
                 ${location.pathname === "/shopping-cart" && "hidden"} 
                 max-md:w-full max-md:max-w-none`}
             >
-              <div className="h-screen flex flex-col">
+              <div className="flex flex-col h-full">
                 {/* Header - Ultra Modern */}
-                <div className="p-6 border-b border-[#F0F0F0] bg-white">
-                  <div className="flex justify-between items-center">
+                <div className="p-6 border-b border-[#F0F0F0] bg-white shrink-0">
+                  <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="relative">
                         <FaShoppingCart className="text-2xl text-primary" />
@@ -99,9 +99,9 @@ const SidebarCart = () => {
                 </div>
 
                 {/* Product List - Modern Scroll */}
-                <div className="flex-1 overflow-y-auto p-4">
+                <div className="flex-1 p-4 overflow-y-auto">
                   {cart.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-center p-12">
+                    <div className="flex flex-col items-center justify-center h-full p-12 text-center">
                       <FaBoxOpen className="text-6xl text-[#E0E0E0] mb-4" />
                       <p className="text-base font-medium text-[#666666] font-bangla mb-2">
                         আপনার কার্ট খালি
@@ -112,7 +112,7 @@ const SidebarCart = () => {
                       <Link
                         to="/product-category"
                         onClick={() => setIsCartOpen(false)}
-                        className="px-6 py-3 bg-primary text-white rounded-lg text-sm font-semibold font-bangla no-underline inline-block transition-all duration-200 hover:opacity-90"
+                        className="inline-block px-6 py-3 text-sm font-semibold text-white no-underline transition-all duration-200 rounded-lg bg-primary font-bangla hover:opacity-90"
                       >
                         কেনাকাটা করুন
                       </Link>
@@ -133,7 +133,7 @@ const SidebarCart = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ delay: index * 0.1 }}
-                            className="flex items-center border border-gray-300 gap-4 p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
+                            className="flex items-center gap-4 p-2 transition-all duration-300 bg-white border border-gray-300 shadow-sm dark:bg-gray-800 rounded-xl hover:shadow-md"
                           >
                             <div className="relative shrink-0">
                               <img
@@ -147,17 +147,17 @@ const SidebarCart = () => {
                                 height={96}
                                 loading="lazy"
                                 decoding="async"
-                                className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg shadow-sm"
+                                className="object-cover w-20 h-20 rounded-lg shadow-sm sm:w-24 sm:h-24"
                               />
                               {item.discount > 0 && (
-                                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md">
+                                <span className="absolute px-2 py-1 text-xs font-semibold text-white bg-red-500 rounded-full shadow-md -top-2 -right-2">
                                   {item.discount.toFixed(0)}% OFF
                                 </span>
                               )}
                             </div>
 
                             <div className="flex-1 min-w-0">
-                              <h3 className="text-sm sm:text-base font-medium text-gray-900 dark:text-white truncate">
+                              <h3 className="text-sm font-medium text-gray-900 truncate sm:text-base dark:text-white">
                                 {item.name}
                               </h3>
 
@@ -169,12 +169,12 @@ const SidebarCart = () => {
                                       item.quantity - 1
                                     )
                                   }
-                                  className="w-8 h-6 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                                  className="flex items-center justify-center w-8 h-6 transition-colors bg-gray-100 rounded-lg sm:w-9 sm:h-9 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
                                   aria-label="Decrease quantity"
                                 >
                                   -
                                 </button>
-                                <span className="w-8 sm:w-10 text-center font-semibold text-gray-900 dark:text-white">
+                                <span className="w-8 font-semibold text-center text-gray-900 sm:w-10 dark:text-white">
                                   {item.quantity}
                                 </span>
                                 <button
@@ -184,7 +184,7 @@ const SidebarCart = () => {
                                       item.quantity + 1
                                     )
                                   }
-                                  className="w-8 h-6 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                                  className="flex items-center justify-center w-8 h-6 transition-colors bg-gray-100 rounded-lg sm:w-9 sm:h-9 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
                                   aria-label="Increase quantity"
                                 >
                                   +
@@ -193,7 +193,7 @@ const SidebarCart = () => {
 
                               <div className="mt-3 space-y-1">
                                 <div className="flex items-center gap-2">
-                                  <div className="text-base sm:text-lg font-bold text-primary">
+                                  <div className="text-base font-bold sm:text-lg text-primary">
                                     Total: {Math.round(itemTotal).toFixed(0)}
                                     <span className="text-xl font-bold">৳</span>
                                   </div>
@@ -217,9 +217,9 @@ const SidebarCart = () => {
 
                 {/* Footer */}
                 {cart.length > 0 && (
-                  <div className="px-4 py-2 sm:p-6 border-t border-gray-400 bg-white dark:bg-gray-900">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-600 dark:text-gray-400 font-medium">
+                  <div className="px-4 py-2 pb-32 bg-white border-t border-gray-400 sm:p-6 dark:bg-gray-900 shrink-0 md:pb-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-medium text-gray-600 dark:text-gray-400">
                         Subtotal:
                       </span>
                       <span className="text-2xl font-bold text-primary">
@@ -231,7 +231,7 @@ const SidebarCart = () => {
                       <Link to="/shopping-cart" className="block">
                         <button
                           onClick={() => setIsCartOpen(false)}
-                          className="btn-minimal btn-outline w-full font-bangla gap-2"
+                          className="w-full gap-2 btn-minimal btn-outline font-bangla"
                         >
                           কার্ট দেখুন
                           <FaArrowRight />
@@ -239,7 +239,7 @@ const SidebarCart = () => {
                       </Link>
                       <button
                         onClick={() => handleCheckout(user, navigate)}
-                        className="btn-minimal btn-primary w-full font-bangla gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full gap-2 btn-minimal btn-primary font-bangla disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={cart.length === 0}
                       >
                         চেকআউট করুন

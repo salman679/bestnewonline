@@ -107,7 +107,7 @@ const Navbar = () => {
       <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-none">
         {/* Main Header Section - Ultra Modern Premium */}
         <div className="max-w-[1440px] mx-auto px-6">
-          <div className="flex items-center justify-between gap-8 h-20">
+          <div className="flex items-center justify-between h-20 gap-8">
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMenu}
@@ -142,7 +142,7 @@ const Navbar = () => {
                   {[...Array(3)].map((_, i) => (
                     <div
                       key={i}
-                      className="h-5 w-20 bg-gray-100 rounded animate-pulse"
+                      className="w-20 h-5 bg-gray-100 rounded animate-pulse"
                     ></div>
                   ))}
                 </div>
@@ -198,20 +198,20 @@ const Navbar = () => {
                               {/* User Info Section */}
                               <div className="flex items-center gap-3 pb-4 mb-2 border-b border-gray-100 dark:border-gray-700">
                                 <div className="relative shrink-0">
-                                  <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-gray-100 dark:ring-gray-700">
+                                  <div className="w-10 h-10 overflow-hidden rounded-full ring-2 ring-gray-100 dark:ring-gray-700">
                                     <img
                                       src={user?.photoURL || avatar}
                                       alt={user?.displayName}
-                                      className="w-full h-full object-cover"
+                                      className="object-cover w-full h-full"
                                     />
                                   </div>
                                   <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-white dark:ring-gray-800"></div>
                                 </div>
                                 <div className="min-w-0">
-                                  <h6 className="font-semibold text-gray-900 dark:text-white text-sm truncate font-bangla">
+                                  <h6 className="text-sm font-semibold text-gray-900 truncate dark:text-white font-bangla">
                                     {user?.displayName}
                                   </h6>
-                                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                  <p className="text-xs text-gray-500 truncate dark:text-gray-400">
                                     {user?.email || user?.Database?.email}
                                   </p>
                                 </div>
@@ -227,7 +227,7 @@ const Navbar = () => {
                                     <Link
                                       to="/admin-dashboard"
                                       onClick={() => setProfileDrop(false)}
-                                      className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors font-medium font-bangla"
+                                      className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-700 transition-colors rounded-lg dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 font-bangla"
                                     >
                                       <FaTachometerAlt className="w-4 h-4 text-blue-500" />
                                       ড্যাশবোর্ড
@@ -236,7 +236,7 @@ const Navbar = () => {
                                   <Link
                                     to="/my-profile"
                                     onClick={() => setProfileDrop(false)}
-                                    className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors font-medium font-bangla"
+                                    className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-700 transition-colors rounded-lg dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 font-bangla"
                                   >
                                     <FaUserCircle className="w-4 h-4 text-purple-500" />
                                     প্রোফাইল
@@ -244,7 +244,7 @@ const Navbar = () => {
                                   <Link
                                     to="/my-orders"
                                     onClick={() => setProfileDrop(false)}
-                                    className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors font-medium font-bangla"
+                                    className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-700 transition-colors rounded-lg dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 font-bangla"
                                   >
                                     <FaShoppingBag className="w-4 h-4 text-orange-500" />
                                     আমার অর্ডার
@@ -252,7 +252,7 @@ const Navbar = () => {
                                   <Link
                                     to="/contact-us"
                                     onClick={() => setProfileDrop(false)}
-                                    className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors font-medium font-bangla"
+                                    className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-700 transition-colors rounded-lg dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 font-bangla"
                                   >
                                     <FaEnvelope className="w-4 h-4 text-green-500" />
                                     যোগাযোগ করুন
@@ -267,7 +267,7 @@ const Navbar = () => {
                                 </h3>
                                 <button
                                   onClick={handleLogout}
-                                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors font-medium font-bangla"
+                                  className="flex items-center w-full gap-3 px-3 py-2 text-sm font-medium text-red-600 transition-colors rounded-lg dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 font-bangla"
                                 >
                                   <FaSignOutAlt className="w-4 h-4" />
                                   লগ আউট
@@ -338,7 +338,7 @@ const Navbar = () => {
             <button
               onClick={toggleHandleOff}
               type="button"
-              className="inline-flex flex-col items-center justify-center gap-1 active:scale-90 transition-all duration-300"
+              className="inline-flex flex-col items-center justify-center gap-1 transition-all duration-300 active:scale-90"
             >
               <div
                 className={`p-1.5 rounded-full transition-colors ${
@@ -355,7 +355,7 @@ const Navbar = () => {
             <button
               onClick={toggleHandleOn}
               type="button"
-              className="inline-flex flex-col items-center justify-center gap-1 active:scale-90 transition-all duration-300"
+              className="inline-flex flex-col items-center justify-center gap-1 transition-all duration-300 active:scale-90"
             >
               <div className="p-1.5 rounded-full transition-colors bg-transparent">
                 <TbCategoryPlus className="w-6 h-6 text-gray-500" />
@@ -368,7 +368,7 @@ const Navbar = () => {
 
           {/* Wishlist */}
           <Link
-            className="inline-flex flex-col items-center justify-center gap-1 active:scale-90 transition-all duration-300"
+            className="inline-flex flex-col items-center justify-center gap-1 transition-all duration-300 active:scale-90"
             to={"/wishlist"}
             onClick={() => (setIsCartOpen(false), setMobileProfileDrop(false))}
           >
@@ -398,7 +398,7 @@ const Navbar = () => {
           </Link>
           {/* Cart */}
           <div
-            className="inline-flex flex-col items-center justify-center gap-1 active:scale-90 transition-all duration-300 cursor-pointer"
+            className="inline-flex flex-col items-center justify-center gap-1 transition-all duration-300 cursor-pointer active:scale-90"
             onClick={() => {
               if (path !== "/shopping-cart") {
                 setIsCartOpen(!isCartOpen);
@@ -440,7 +440,7 @@ const Navbar = () => {
           <Link
             to={"/product-category"}
             onClick={() => (setIsCartOpen(false), setMobileProfileDrop(false))}
-            className="inline-flex flex-col items-center justify-center gap-1 active:scale-90 transition-all duration-300"
+            className="inline-flex flex-col items-center justify-center gap-1 transition-all duration-300 active:scale-90"
           >
             <div
               className={`p-1.5 rounded-full transition-colors ${
@@ -469,135 +469,33 @@ const Navbar = () => {
           </Link>
           {/* User */}
           {user ? (
-            <div className="inline-flex flex-col items-center justify-center gap-1 active:scale-90 transition-all duration-300">
-              <button
-                onClick={() => (setIsCartOpen(false), mobileProfileHandle())}
-                type="button"
-                className="inline-flex flex-col items-center justify-center gap-1"
+            <Link
+              to="/my-profile"
+              onClick={() => setIsCartOpen(false)}
+              className="inline-flex flex-col items-center justify-center gap-1 transition-all duration-300 active:scale-90"
+            >
+              <img
+                className={`w-7 h-7 object-cover border-2 cursor-pointer rounded-full transition-all ${
+                  path === "/my-profile"
+                    ? "border-primary"
+                    : "border-transparent"
+                }`}
+                src={`${user?.photoURL ? user?.photoURL : avatar}`}
+                alt="Profile"
+              />
+              <span
+                className={`text-[11px] font-semibold font-bangla ${
+                  path === "/my-profile" ? "text-primary" : "text-gray-500"
+                }`}
               >
-                <img
-                  className={`w-7 h-7 object-cover border-2 cursor-pointer rounded-full transition-all ${
-                    mobileProfileDrop ? "border-primary" : "border-transparent"
-                  }`}
-                  src={`${user?.photoURL ? user?.photoURL : avatar}`}
-                  alt="Profile"
-                />
-                <span
-                  className={`text-[11px] font-semibold font-bangla ${
-                    mobileProfileDrop ? "text-primary" : "text-gray-500"
-                  }`}
-                >
-                  প্রোফাইল
-                </span>
-              </button>
-
-              {mobileProfileDrop && (
-                <ul
-                  ref={dropdownRef}
-                  className="max-[640px]:max-h-[400px] overflow-y-auto"
-                >
-                  <div className="absolute z-[10000] right-0 bottom-11 max-[640px]:max-w-[250px] max-[640px]:max-h-[600px] overflow-y-auto duration-300 w-80 p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg">
-                    <button
-                      onClick={() => setMobileProfileDrop(false)} // Add your function to hide the dropdown
-                      className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
-                    >
-                      <FaTimes className=" cursor-pointer  w-5 h-5" />
-                    </button>
-                    {/* User Info Section */}
-                    <div className="flex items-center gap-4 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
-                      <div className="relative">
-                        <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-blue-500">
-                          <img
-                            src={user?.photoURL}
-                            alt={user?.displayName}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div className="absolute -bottom-1 -right-1 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-gray-800"></div>
-                      </div>
-                      <div>
-                        <h6 className="font-semibold text-gray-900 dark:text-white text-lg">
-                          {user?.displayName}
-                        </h6>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          {user?.Database?.email}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Main Menu */}
-                    <div className="">
-                      <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                        Menu
-                      </h3>
-                      <div className="space-y-1">
-                        {user?.Database?.role === "admin" && (
-                          <Link
-                            to="/admin-dashboard"
-                            onClick={mobileProfileHandle}
-                            className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
-                              path === "/admin-dashboard"
-                                ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
-                                : "hover:bg-gray-50 dark:hover:bg-gray-700"
-                            }`}
-                          >
-                            <FaTachometerAlt className="w-5 h-5" />
-                            <span className="font-medium">Dashboard</span>
-                          </Link>
-                        )}
-                        <Link
-                          to="/my-profile"
-                          onClick={mobileProfileHandle}
-                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                        >
-                          <FaUserCircle className="w-5 h-5 text-purple-500" />
-                          <span className="text-gray-700 dark:text-gray-300">
-                            My Profile
-                          </span>
-                        </Link>
-                      </div>
-                    </div>
-
-                    {/* Support & Settings */}
-                    <div className="">
-                      <div className="space-y-1">
-                        <Link
-                          to="/contact-us"
-                          onClick={mobileProfileHandle}
-                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                        >
-                          <FaEnvelope className="w-5 h-5 text-green-500" />
-                          <span className="text-gray-700 dark:text-gray-300">
-                            Contact Us
-                          </span>
-                        </Link>
-                      </div>
-                    </div>
-
-                    {/* Security &  */}
-                    <div>
-                      <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                        Logout
-                      </h3>
-                      <div className="space-y-1">
-                        <button
-                          onClick={handleLogout}
-                          className="w-full flex items-center gap-3 p-3 rounded-lg textColor hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-                        >
-                          <FaSignOutAlt className="w-5 h-5" />
-                          <span className="font-medium">Log Out</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </ul>
-              )}
-            </div>
+                প্রোফাইল
+              </span>
+            </Link>
           ) : (
             <Link
               to={"/login"}
               onClick={() => setIsCartOpen(false)}
-              className="inline-flex flex-col items-center justify-center gap-1 active:scale-90 transition-all duration-300"
+              className="inline-flex flex-col items-center justify-center gap-1 transition-all duration-300 active:scale-90"
             >
               <div
                 className={`p-1.5 rounded-full transition-colors ${
