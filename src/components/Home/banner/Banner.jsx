@@ -5,31 +5,39 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import "./banner.css";
 import { axiosInstance } from "../../../lib/axiosInstanace";
 
-// Dummy banner images from Unsplash
+// Dummy banner images from Unsplash with optimized dimensions
 const dummyBanners = [
   {
     id: 1,
     image:
-      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&h=600&fit=crop",
-    alt: "Fashion Collection",
+      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=500&fit=crop&auto=format&q=80",
+    imageMobile:
+      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=640&h=400&fit=crop&auto=format&q=80",
+    alt: "ফ্যাশন কালেকশন",
   },
   {
     id: 2,
     image:
-      "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920&h=600&fit=crop",
-    alt: "Trendy Accessories",
+      "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&h=500&fit=crop&auto=format&q=80",
+    imageMobile:
+      "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=640&h=400&fit=crop&auto=format&q=80",
+    alt: "ট্রেন্ডি এক্সেসরিজ",
   },
   {
     id: 3,
     image:
-      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920&h=600&fit=crop",
-    alt: "Premium Products",
+      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&h=500&fit=crop&auto=format&q=80",
+    imageMobile:
+      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=640&h=400&fit=crop&auto=format&q=80",
+    alt: "প্রিমিয়াম পণ্য",
   },
   {
     id: 4,
     image:
-      "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1920&h=600&fit=crop",
-    alt: "Latest Trends",
+      "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&h=500&fit=crop&auto=format&q=80",
+    imageMobile:
+      "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=640&h=400&fit=crop&auto=format&q=80",
+    alt: "লেটেস্ট ট্রেন্ড",
   },
 ];
 
@@ -83,16 +91,31 @@ const Banner = () => {
               height: "100%",
             }}
           >
-            <img
-              src={banners[currentSlide]?.image}
-              alt={banners[currentSlide]?.alt}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                objectPosition: "center",
-              }}
-            />
+            {/* Responsive Picture Element for LCP Optimization */}
+            <picture>
+              <source
+                media="(max-width: 640px)"
+                srcSet={
+                  banners[currentSlide]?.imageMobile ||
+                  banners[currentSlide]?.image
+                }
+              />
+              <img
+                src={banners[currentSlide]?.image}
+                alt={banners[currentSlide]?.alt}
+                width={1200}
+                height={500}
+                fetchPriority={currentSlide === 0 ? "high" : "auto"}
+                loading={currentSlide === 0 ? "eager" : "lazy"}
+                decoding={currentSlide === 0 ? "sync" : "async"}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center",
+                }}
+              />
+            </picture>
 
             {/* Subtle Gradient Overlay */}
             <div

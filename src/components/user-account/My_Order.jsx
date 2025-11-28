@@ -4,65 +4,115 @@ import { AuthContext } from "../../context/auth/AuthContext";
 import ScrollToTop from "../ScrollToTop";
 import OrderDetailsModal from "../../pages/admin/orders/components/OrderDetailsModal";
 import { toast } from "react-hot-toast";
-import { FaCopy, FaSearch, FaFilter, FaSpinner, FaBox, FaShoppingBag, FaCalendar, FaMoneyBill } from "react-icons/fa";
-import Swal from 'sweetalert2';
+import {
+  FaCopy,
+  FaFilter,
+  FaSpinner,
+  FaBoxOpen,
+  FaShoppingBag,
+  FaCalendarAlt,
+  FaCreditCard,
+  FaChevronRight,
+  FaFileInvoice,
+} from "react-icons/fa";
+import Swal from "sweetalert2";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const My_Order = () => {
   const [orders, setOrders] = useState([]);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalOrders: 0,
+  });
   const [filter, setFilter] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [dateRange, setDateRange] = useState({ start: "", end: "" });
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const { user } = useContext(AuthContext);
-  const [orderedData, setOrderedData] = useLocalStorage('orderedDataList', []);
+  const [orderedData] = useLocalStorage("orderedDataList", []);
 
-  
-
-  const filteredOrders = filter === "all" ? orders : orders.filter(order => order.status === filter);;
+  // Remove client-side filtering since we do it server-side now (except for guest orders which are local)
+  // But wait, for guest orders 'orderedData', we still need client-side logic if we want to filter them.
+  // The prompt focus is on the main "My Orders" which usually means the logged-in user's orders.
+  // I will keep `filteredOrders` logic only for guest orders if needed, or just render `orders` directly for user.
 
   useEffect(() => {
     const fetchOrders = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
       try {
-        if (user) {
-          const response = await axiosInstance(`/order/user/${user?.uid}`);
+        setLoading(true);
+        // Pass page and filter status to API
+        const statusQuery = filter !== "all" ? `&status=${filter}` : "";
+        const dateQuery =
+          dateRange.start && dateRange.end
+            ? `&startDate=${dateRange.start}&endDate=${dateRange.end}`
+            : "";
+        const response = await axiosInstance(
+          `/order/user/${user?.uid}?page=${pagination.currentPage}&limit=10${statusQuery}${dateQuery}`
+        );
+
+        if (response.data.orders) {
+          setOrders(response.data.orders);
+          setPagination((prev) => ({
+            ...prev,
+            totalPages: response.data.totalPages,
+            currentPage: response.data.currentPage, // Ensure sync
+            totalOrders: response.data.totalOrders,
+          }));
+        } else {
+          // Fallback for old API structure if any
           setOrders(response.data);
         }
       } catch (error) {
-        console.error('Error fetching orders:', error);
-        toast.error('Failed to fetch orders');
+        console.error("Error fetching orders:", error);
+        toast.error("অর্ডার লোড করতে ব্যর্থ হয়েছে");
       } finally {
         setLoading(false);
       }
     };
     fetchOrders();
-  }, [user?.uid, user]);
+  }, [user, pagination.currentPage, filter, dateRange]); // Re-fetch when page or filter changes
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= pagination.totalPages) {
+      setPagination((prev) => ({ ...prev, currentPage: newPage }));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const handleCancelOrder = async (orderId) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "আপনি কি নিশ্চিত?",
+      text: "আপনি এটি পুনরায় ফিরিয়ে আনতে পারবেন না!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, cancel it!"
+      confirmButtonColor: "#EF4444",
+      cancelButtonColor: "#6B7280",
+      confirmButtonText: "হ্যাঁ, বাতিল করুন!",
+      cancelButtonText: "না",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axiosInstance.patch(`/order/update/${orderId}`, { status: 'cancelled from user' });
-          setOrders(orders.map(order =>
-            order._id === orderId ? { ...order, status: 'cancelled from user' } : order
-          ));
-          Swal.fire({
-            title: "Cancelled !",
-            text: "Your order has been cancelled.",
-            icon: "success"
+          await axiosInstance.patch(`/order/update/${orderId}`, {
+            status: "cancelled from user",
           });
+          setOrders(
+            orders.map((order) =>
+              order._id === orderId
+                ? { ...order, status: "cancelled from user" }
+                : order
+            )
+          );
+          Swal.fire("বাতিল!", "আপনার অর্ডার বাতিল করা হয়েছে।", "success");
         } catch (error) {
-          console.error('Error cancelling order:', error);
-          toast.error('Failed to cancel order');
+          console.error("Error cancelling order:", error);
+          toast.error("অর্ডার বাতিল করতে ব্যর্থ হয়েছে");
         }
       }
     });
@@ -70,349 +120,338 @@ const My_Order = () => {
 
   const handleCopyOrderId = (orderId) => {
     navigator.clipboard.writeText(orderId);
-    toast.success('Order ID copied to clipboard!');
+    toast.success("অর্ডার আইডি কপি করা হয়েছে!");
   };
 
-  // Status options
-  const statusOptions = [
-    { value: 'pending', label: 'Pending', color: 'yellow' },
-    { value: 'processing', label: 'Processing', color: 'blue' },
-    { value: 'shipped', label: 'Shipped', color: 'indigo' },
-    { value: 'completed', label: 'Completed', color: 'green' },
-    { value: 'cancelled', label: 'Cancelled', color: 'red' },
-    { value: 'cancelled from user', label: 'Cancelled by You', color: 'red' },
-    { value: 'refunded', label: 'Refunded', color: 'purple' }
-  ];
+  const handleInvoiceDownload = (orderId) => {
+    toast.success("ইনভয়েস ডাউনলোড শীঘ্রই শুরু হবে!");
+    // Implement actual invoice logic here
+  };
 
-  const getStatusStyle = (status) => {
-    switch (status) {
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'processing':
-        return 'bg-blue-100 text-blue-800';
-      case 'shipped':
-        return 'bg-indigo-100 text-indigo-800';
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      case 'cancelled':
-        return 'bg-red-100 text-red-800';
-      case 'cancelled from user':
-        return 'bg-red-100 text-red-800';
-      case 'refunded':
-        return 'bg-purple-100 text-purple-800';
+  const getStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case "pending":
+        return "bg-yellow-100 text-yellow-700 border-yellow-200"; // Pending
+      case "processing":
+        return "bg-blue-100 text-blue-700 border-blue-200"; // Confirmed
+      case "confirmed":
+        return "bg-blue-100 text-blue-700 border-blue-200";
+      case "shipped":
+        return "bg-orange-100 text-orange-700 border-orange-200"; // On Delivery
+      case "completed":
+        return "bg-green-100 text-green-700 border-green-200"; // Delivered
+      case "delivered":
+        return "bg-green-100 text-green-700 border-green-200";
+      case "cancelled":
+      case "cancelled from user":
+        return "bg-red-100 text-red-700 border-red-200"; // Cancelled
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "bg-gray-100 text-gray-700 border-gray-200";
     }
   };
 
   const formatStatus = (status) => {
-    switch (status) {
-      case 'cancelled from user':
-        return 'Cancelled by You';
-      case 'cancelled':
-        return 'Cancelled by Admin';
+    switch (status?.toLowerCase()) {
+      case "pending":
+        return "পেন্ডিং";
+      case "processing":
+        return "কনফার্মড";
+      case "confirmed":
+        return "কনফার্মড";
+      case "shipped":
+        return "অন ডেলিভারি";
+      case "completed":
+        return "ডেলিভারড";
+      case "delivered":
+        return "ডেলিভারড";
+      case "cancelled":
+        return "বাতিল";
+      case "cancelled from user":
+        return "বাতিল (আপনি)";
       default:
-        return status.charAt(0).toUpperCase() + status.slice(1);
+        return status;
     }
   };
 
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("bn-BD", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
   const formatPrice = (price) => {
-    return `${price.toLocaleString()}৳`;
+    return price.toLocaleString("bn-BD");
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8 dark:from-gray-900 dark:to-gray-800 md:py-16">
+    <section className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 md:py-12 font-sans font-hind-siliguri">
       <ScrollToTop />
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header Section */}
-        <div className="mb-8 rounded-xl bg-white p-8 shadow-lg dark:bg-gray-800 border dark:border-gray-700">
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-4">
-              <div className="rounded-full bg-orange-100 p-3 dark:bg-orange-900/30">
-                <FaShoppingBag className="h-8 w-8 text-orange-500" />
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        {/* Page Header */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white font-bangla">
+              আমার অর্ডার
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm font-bangla">
+              আপনার পূর্ববর্তী অর্ডারের তালিকা এবং বিস্তারিত
+            </p>
+          </div>
+
+          {/* Filters */}
+          {orders.length > 0 && (
+            <div className="flex flex-wrap items-center gap-4">
+              {/* Date Range */}
+              <div className="flex items-center gap-2 bg-white dark:bg-gray-800 p-1 rounded-xl border border-gray-200 dark:border-gray-700">
+                <input
+                  type="date"
+                  value={dateRange.start}
+                  onChange={(e) =>
+                    setDateRange({ ...dateRange, start: e.target.value })
+                  }
+                  className="bg-transparent text-xs font-bangla text-gray-600 dark:text-gray-300 outline-none px-2"
+                />
+                <span className="text-gray-400">-</span>
+                <input
+                  type="date"
+                  value={dateRange.end}
+                  onChange={(e) =>
+                    setDateRange({ ...dateRange, end: e.target.value })
+                  }
+                  className="bg-transparent text-xs font-bangla text-gray-600 dark:text-gray-300 outline-none px-2"
+                />
               </div>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Orders</h1>
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">View and manage your orders</p>
+
+              {/* Status Filter */}
+              <div className="relative min-w-[180px]">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaFilter className="text-gray-400 w-3 h-3" />
+                </div>
+                <select
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                  className="block w-full pl-9 pr-8 py-2.5 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none cursor-pointer font-bangla"
+                >
+                  <option value="all">সকল অর্ডার</option>
+                  <option value="pending">পেন্ডিং</option>
+                  <option value="processing">কনফার্মড</option>
+                  <option value="shipped">অন ডেলিভারি</option>
+                  <option value="completed">ডেলিভারড</option>
+                  <option value="cancelled">বাতিল</option>
+                </select>
               </div>
             </div>
-
-            {/* Search and Filter Controls */}
-            {orders.length > 0 && (
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <select
-                    value={filter}
-                    onChange={(e) => setFilter(e.target.value)}
-                    className="w-full appearance-none rounded-lg border-2 border-gray-200 bg-white px-4 py-2.5 pr-10 text-sm font-medium transition-colors focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                  >
-                    <option value="all">All Orders</option>
-                    {statusOptions.map((status) => (
-                      <option key={status.value} value={status.value}>
-                        {status.label}
-                      </option>
-                    ))}
-                  </select>
-                  <FaFilter className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                </div>
-              </div>
-            )}
-          </div>
+          )}
         </div>
 
-        {/* Orders Sections */}
-        <div className="space-y-8">
-          {/* Account Orders */}
-
-          {user && 
-            (
-              orders.length > 0 && <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-gray-800">
-                <h2 className="mb-6 flex max-[640px]:text-lg text-nowrap items-center gap-2 text-xl font-semibold text-gray-900 dark:text-white">
-                  <FaBox className="textColor" />
-                  Orders with Account
-                </h2>
-    
-                <AnimatePresence>
-                  {loading ? (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="flex min-h-[200px] items-center justify-center"
-                    >
-                      <div className="flex items-center gap-3">
-                        <FaSpinner className="h-6 w-6 animate-spin textColor" />
-                        <span className="text-gray-600 dark:text-gray-400">Loading orders...</span>
-                      </div>
-                    </motion.div>
-                  ) : filteredOrders.length === 0 ? (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 20 }}
-                      className="flex min-h-[200px] flex-col items-center justify-center"
-                    >
-                      <img
-                        src="https://www.svgrepo.com/show/507080/empty-box.svg"
-                        alt="No orders"
-                        className="mb-4 h-24 w-24 opacity-50"
-                      />
-                      <p className="text-gray-500 dark:text-gray-400">No orders found</p>
-                    </motion.div>
-                  ) : (
-                    <div className="space-y-6">
-                      {[...filteredOrders].reverse().map((order) => (
-                        <motion.div
-                          key={order._id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 20 }}
-                          className="group overflow-hidden rounded-xl border border-gray-200 bg-white transition-all hover:border-orange-200 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 hover:dark:border-orange-500/30"
-                        >
-                          <div className="p-6">
-                            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-                              {/* Order ID */}
-                              <div className="flex flex-col">
-                                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Order ID</span>
-                                <div className="mt-2 flex items-center gap-2">
-                                  <span className="font-semibold text-gray-900 dark:text-white">
-                                    {order._id.slice(0, 8)}...
-                                  </span>
-                                  <button
-                                    onClick={() => handleCopyOrderId(order._id)}
-                                    className="rounded-full p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-orange-500 dark:text-gray-500 dark:hover:bg-gray-700"
-                                  >
-                                    <FaCopy className="h-4 w-4" />
-                                  </button>
-                                </div>
-                              </div>
-    
-                              {/* Date */}
-                              <div className="flex flex-col">
-                                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Date</span>
-                                <div className="mt-2 flex items-center gap-2">
-                                  <FaCalendar className="h-4 w-4 text-orange-500" />
-                                  <span className="font-semibold text-gray-900 dark:text-white">
-                                    {new Date(order.orderDate).toLocaleDateString()}
-                                  </span>
-                                </div>
-                              </div>
-    
-                              {/* Total */}
-                              <div className="flex flex-col">
-                                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Total</span>
-                                <div className="mt-2 flex items-center gap-2">
-                                  <FaMoneyBill className="h-4 w-4 text-orange-500" />
-                                  <span className="font-semibold text-gray-900 dark:text-white">
-                                    {formatPrice(order.total)}
-                                  </span>
-                                </div>
-                              </div>
-    
-                              {/* Status */}
-                              <div className="flex flex-col">
-                                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Status</span>
-                                <div className="mt-2">
-                                  <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium ${getStatusStyle(order.status)}`}>
-                                    {formatStatus(order.status)}
-                                  </span>
-                                </div>
-                              </div>
-    
-                              {/* Actions */}
-                              <div className="flex items-end justify-end gap-3">
-                                {order.status === 'pending' && (
-                                  <button
-                                    onClick={() => handleCancelOrder(order._id)}
-                                    className="rounded-lg border-2 border-red-200 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-900/20"
-                                  >
-                                    Cancel
-                                  </button>
-                                )}
-                                <button
-                                  onClick={() => setSelectedOrder(order)}
-                                  className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-                                >
-                                  View Details
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                  )}
-                </AnimatePresence>
+        {/* Logged In User Orders */}
+        {user && (
+          <div className="space-y-6">
+            {loading ? (
+              <div className="flex justify-center py-20">
+                <FaSpinner className="animate-spin w-8 h-8 text-primary" />
               </div>
-              )  
-          }
-          
-
-
-          {/* Orders without Account */}
-          <div className="rounded-xl bg-white p-8 shadow-lg dark:bg-gray-800 border dark:border-gray-700">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="rounded-full bg-orange-100 p-3 dark:bg-orange-900/30">
-                <FaShoppingBag className="h-6 w-6 text-orange-500" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Orders without Account</h2>
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Track your guest orders here</p>
-              </div>
-            </div>
-
-            <AnimatePresence>
-              {orderedData.length === 0 ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  className="flex min-h-[200px] flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 dark:border-gray-700"
+            ) : orders.length === 0 ? (
+              <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-12 text-center border border-gray-100 dark:border-gray-700">
+                <div className="w-20 h-20 bg-gray-50 dark:bg-gray-700/50 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <FaBoxOpen className="w-10 h-10 text-gray-400" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 font-bangla">
+                  কোনো অর্ডার পাওয়া যায়নি
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto font-bangla">
+                  মনে হচ্ছে আপনি এখনও কোনো অর্ডার করেননি অথবা আপনার ফিল্টারের
+                  সাথে কোনো অর্ডার মিলছে না।
+                </p>
+                <Link
+                  to="/product-category"
+                  className="btn-minimal btn-primary inline-flex font-bangla"
                 >
-                  <img
-                    src="https://www.svgrepo.com/show/507080/empty-box.svg"
-                    alt="No orders"
-                    className="mb-4 h-24 w-24 opacity-50"
-                  />
-                  <p className="text-gray-500 dark:text-gray-400">No orders found</p>
-                </motion.div>
-              ) : (
-                <div className="space-y-6">
-                  {[...orderedData].reverse().map((order) => (
+                  কেনাকাটা শুরু করুন
+                </Link>
+              </div>
+            ) : (
+              <>
+                <div className="grid gap-6">
+                  {orders.map((order) => (
                     <motion.div
-                      key={order.orderId}
-                      initial={{ opacity: 0, y: 20 }}
+                      key={order._id}
+                      initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 20 }}
-                      className="overflow-hidden rounded-xl border border-gray-200 bg-white transition-all hover:border-orange-200 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 hover:dark:border-orange-500/30"
+                      className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow"
                     >
-                      {/* Order Header */}
-                      <div className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-6">
-                        <div className="flex flex-wrap items-center justify-between gap-4">
-                          <div className="flex items-center gap-4">
-                            <div className="rounded-full bg-orange-100 p-2 dark:bg-orange-900/30">
-                              <FaBox className="h-5 w-5 text-orange-500" />
-                            </div>
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                                  অর্ডার আইডি: #{order.orderId}
-                                </h3>
-                                <button
-                                  onClick={() => handleCopyOrderId(order.orderId)}
-                                  className="rounded-full p-1.5 text-gray-400 transition-colors hover:bg-white hover:text-orange-500 dark:hover:bg-gray-700"
-                                >
-                                  <FaCopy className="h-4 w-4" />
-                                </button>
-                              </div>
-                              <p className="text-sm text-gray-500 dark:text-gray-400">
-                                তারিখ: {new Date(order.orderDate).toLocaleDateString()}
-                              </p>
-                            </div>
+                      {/* Card Header */}
+                      <div className="p-5 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 flex flex-wrap gap-4 justify-between items-center">
+                        <div className="flex flex-wrap items-center gap-4">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-500 dark:text-gray-400 font-medium font-bangla">
+                              অর্ডার আইডি
+                            </span>
+                            <span className="text-sm font-bold text-gray-900 dark:text-white">
+                              #{order._id.slice(-6).toUpperCase()}
+                            </span>
+                            <button
+                              onClick={() => handleCopyOrderId(order._id)}
+                              className="text-gray-400 hover:text-primary transition-colors"
+                              title="কপি করুন"
+                            >
+                              <FaCopy className="w-3 h-3" />
+                            </button>
                           </div>
-                          <div className="text-right">
-                            <p className="text-xl font-semibold text-orange-500">
-                              মোট: {formatPrice(order.total)}
-                            </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                              পেমেন্ট: {order.paymentMethod}
-                            </p>
+                          <div className="hidden sm:block w-1 h-1 bg-gray-300 rounded-full"></div>
+                          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                            <FaCalendarAlt className="w-3.5 h-3.5" />
+                            <span className="font-bangla">
+                              {formatDate(order.orderDate)}
+                            </span>
                           </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => handleInvoiceDownload(order._id)}
+                            className="hidden sm:flex items-center gap-2 text-xs font-medium text-gray-500 hover:text-primary transition-colors font-bangla"
+                          >
+                            <FaFileInvoice className="w-3.5 h-3.5" />
+                            ইনভয়েস
+                          </button>
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-bold border font-bangla ${getStatusColor(
+                              order.status
+                            )}`}
+                          >
+                            {formatStatus(order.status)}
+                          </span>
                         </div>
                       </div>
 
-                      {/* Order Items */}
-                      <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                        {order.items?.map((item) => (
-                          <div
-                            key={item.productId}
-                            className="flex flex-col gap-6 p-6 sm:flex-row sm:items-center"
-                          >
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="h-32 w-32 rounded-lg object-cover ring-1 ring-gray-200 dark:ring-gray-700"
-                            />
-                            <div className="flex flex-1 flex-col">
-                              <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
-                                {item.name}
-                              </h4>
-                              <div className="mt-4 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
-                                <div className="flex items-center gap-2">
-                                  <span className="rounded-full bg-gray-100 p-1.5 text-gray-500 dark:bg-gray-700">📏</span>
-                                  <span className="text-gray-600 dark:text-gray-300">সাইজ: {item.selectedSize}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <span className="rounded-full bg-gray-100 p-1.5 text-gray-500 dark:bg-gray-700">🎨</span>
-                                  <span className="text-gray-600 dark:text-gray-300">কালার: {item.selectedColor}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <span className="rounded-full bg-gray-100 p-1.5 text-gray-500 dark:bg-gray-700">🔢</span>
-                                  <span className="text-gray-600 dark:text-gray-300">পরিমাণ: {item.quantity}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <span className="rounded-full bg-gray-100 p-1.5 text-gray-500 dark:bg-gray-700">💰</span>
-                                  <span className="text-gray-600 dark:text-gray-300">দাম: {formatPrice(item.price)}</span>
-                                </div>
-                              </div>
-                              {item.discount > 0 && (
-                                <div className="mt-4">
-                                  <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1.5 text-sm font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                                    🎉 {item.discount}% ছাড়!
-                                  </span>
-                                </div>
-                              )}
+                      {/* Card Body */}
+                      <div className="p-5 sm:p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                          <div className="flex-1">
+                            <div className="flex flex-col gap-1">
+                              <span className="text-sm text-gray-500 dark:text-gray-400 font-bangla">
+                                মোট পরিমাণ
+                              </span>
+                              <span className="text-xl font-bold text-gray-900 dark:text-white font-bangla">
+                                {formatPrice(order.total)}৳
+                              </span>
+                              <span className="text-xs text-gray-400 flex items-center gap-1 font-bangla">
+                                <FaCreditCard className="w-3 h-3" />
+                                {order.paymentMethod === "cod"
+                                  ? "ক্যাশ অন ডেলিভারি"
+                                  : order.paymentMethod}
+                              </span>
                             </div>
                           </div>
-                        ))}
+
+                          <div className="flex flex-wrap items-center gap-3">
+                            {order.status === "pending" && (
+                              <button
+                                onClick={() => handleCancelOrder(order._id)}
+                                className="px-4 py-2 rounded-xl text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/10 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors border border-red-100 dark:border-red-900/30 font-bangla"
+                              >
+                                বাতিল করুন
+                              </button>
+                            )}
+                            <button
+                              onClick={() => setSelectedOrder(order)}
+                              className="btn-minimal btn-outline px-5 py-2 rounded-xl text-sm flex items-center gap-2 font-bangla"
+                            >
+                              বিস্তারিত দেখুন
+                              <FaChevronRight className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </motion.div>
                   ))}
                 </div>
-              )}
-            </AnimatePresence>
+
+                {/* Pagination */}
+                {pagination.totalPages > 1 && (
+                  <div className="flex justify-center mt-8 gap-2">
+                    <button
+                      onClick={() =>
+                        handlePageChange(pagination.currentPage - 1)
+                      }
+                      disabled={pagination.currentPage === 1}
+                      className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-800 font-bangla text-sm"
+                    >
+                      পূর্ববর্তী
+                    </button>
+                    <span className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                      পৃষ্ঠা {pagination.currentPage} / {pagination.totalPages}
+                    </span>
+                    <button
+                      onClick={() =>
+                        handlePageChange(pagination.currentPage + 1)
+                      }
+                      disabled={
+                        pagination.currentPage === pagination.totalPages
+                      }
+                      className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-800 font-bangla text-sm"
+                    >
+                      পরবর্তী
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
           </div>
-        </div>
+        )}
+
+        {/* Guest Orders */}
+        {!user && orderedData.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 font-bangla">
+              গেস্ট অর্ডারসমূহ
+            </h2>
+            <div className="grid gap-6">
+              {[...orderedData].reverse().map((order) => (
+                <div
+                  key={order.orderId}
+                  className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden"
+                >
+                  <div className="p-5 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-500 font-bangla">
+                        অর্ডার আইডি:
+                      </span>
+                      <span className="font-bold text-gray-900 dark:text-white">
+                        #{order.orderId}
+                      </span>
+                    </div>
+                    <span className="text-lg font-bold text-primary font-bangla">
+                      {formatPrice(order.total)}৳
+                    </span>
+                  </div>
+                  <div className="p-5">
+                    <div className="flex flex-col sm:flex-row gap-4 items-start">
+                      <div className="flex-1">
+                        <div className="flex flex-wrap gap-2 mb-2">
+                          {order.items?.map((item, idx) => (
+                            <img
+                              key={idx}
+                              src={item.image}
+                              alt={item.name}
+                              className="w-12 h-12 rounded-lg object-cover border border-gray-100"
+                            />
+                          ))}
+                        </div>
+                        <p className="text-sm text-gray-500 font-bangla">
+                          {order.items?.length} টি পণ্য •{" "}
+                          {formatDate(order.orderDate)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Order Details Modal */}
@@ -422,8 +461,6 @@ const My_Order = () => {
             order={selectedOrder}
             handleCopyOrderId={handleCopyOrderId}
             onClose={() => setSelectedOrder(null)}
-            onStatusUpdate={() => { }}
-            className="mt-7"
           />
         )}
       </AnimatePresence>

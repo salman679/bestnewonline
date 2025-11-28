@@ -1,20 +1,24 @@
-import image from '../assets/images/banner-1.jpg'
-import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane } from 'react-icons/fa';
-import { motion } from 'framer-motion';
-import { useContext, useState } from 'react';
-import { toast } from 'react-hot-toast';
-import { axiosInstance } from '../lib/axiosInstanace';
-import { IndexContext } from '../context';
+import {
+  FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaPaperPlane,
+} from "react-icons/fa";
+import { motion } from "framer-motion";
+import { useContext, useState } from "react";
+import { toast } from "react-hot-toast";
+import { axiosInstance } from "../lib/axiosInstanace";
+import { IndexContext } from "../context";
 
 const Contact_Us = () => {
-  const { siteSettings } = useContext(IndexContext)
+  const { siteSettings } = useContext(IndexContext);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: '',
-    terms: false
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+    terms: false,
   });
 
   const [errors, setErrors] = useState({});
@@ -24,29 +28,29 @@ const Contact_Us = () => {
     const newErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = "নাম প্রয়োজন";
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "ইমেইল প্রয়োজন";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = "ইমেইল সঠিক নয়";
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
+      newErrors.phone = "ফোন নম্বর প্রয়োজন";
     }
 
     if (!formData.subject.trim()) {
-      newErrors.subject = 'Subject is required';
+      newErrors.subject = "বিষয় প্রয়োজন";
     }
 
     if (!formData.message.trim()) {
-      newErrors.message = 'Message is required';
+      newErrors.message = "বার্তা প্রয়োজন";
     }
 
     if (!formData.terms) {
-      newErrors.terms = 'You must agree to the terms and conditions';
+      newErrors.terms = "আপনাকে শর্তাবলীতে সম্মত হতে হবে";
     }
 
     setErrors(newErrors);
@@ -55,15 +59,15 @@ const Contact_Us = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
   };
@@ -77,220 +81,295 @@ const Contact_Us = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await axiosInstance.post('/contact', {
+      const response = await axiosInstance.post("/contact", {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
         subject: formData.subject,
-        message: formData.message
+        message: formData.message,
       });
 
-
       if (response.status === 201) {
-        toast.success('Message sent successfully!');
+        toast.success("বার্তা সফলভাবে পাঠানো হয়েছে!");
         // Reset form
         setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          subject: '',
-          message: '',
-          terms: false
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: "",
+          terms: false,
         });
       }
     } catch (error) {
-      console.error('Error sending message:', error);
-      toast.error(error.response?.data?.message || 'Failed to send message. Please try again.');
+      console.error("Error sending message:", error);
+      toast.error(
+        error.response?.data?.message ||
+          "বার্তা পাঠাতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।"
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="font-[sans-serif] min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Hero Section */}
-      <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-blue-600/80 z-10"></div>
-        <img
-          className='w-full h-[400px] max-[640px]:h-[200px] object-cover'
-          src={`https://img.freepik.com/free-photo/shopping-cart-black-background-with-copy-space_23-2148317906.jpg`}
-          alt="Contact Us Banner"
-        />
-        <div className="absolute inset-0 z-20 flex items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center text-white"
-          >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
-            <p className="text-lg md:text-xl">We'd love to hear from you</p>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Contact Information Cards */}
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition-shadow"
-          >
-            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
-              <FaEnvelope className="w-6 h-6 text-blue-500" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Email Us</h3>
-            <p className="text-gray-600 dark:text-gray-400">{siteSettings?.contactEmail}</p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition-shadow"
-          >
-            <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
-              <FaPhone className="w-6 h-6 text-green-500" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Call Us</h3>
-            <p className="text-gray-600 dark:text-gray-400">{siteSettings?.contactPhone}</p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition-shadow"
-          >
-            <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center mx-auto mb-4">
-              <FaMapMarkerAlt className="w-6 h-6 textColor" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Visit Us</h3>
-            <p className="text-gray-600 dark:text-gray-400">{siteSettings?.address}</p>
-          </motion.div>
-        </div>
-
-        {/* Contact Form */}
+    <div className="min-h-screen bg-white pt-12 pb-24 font-bangla">
+      {/* Header Section - Ultra Minimal */}
+      <div className="container-minimal mb-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 md:p-12"
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-2xl mx-auto"
         >
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Send us a Message</h2>
-            <p className="text-gray-600 dark:text-gray-400">Fill out the form below and we'll get back to you shortly</p>
+          <h1 className="heading-1 mb-4 text-gray-900 font-bangla">
+            যোগাযোগ করুন
+          </h1>
+          <p className="body-text text-gray-600 font-bangla">
+            আমরা আপনার যেকোনো প্রশ্নের উত্তর দিতে প্রস্তুত। আপনার মতামত আমাদের
+            কাছে গুরুত্বপূর্ণ।
+          </p>
+          <div className="w-16 h-1 bg-primary mx-auto mt-6 rounded-full"></div>
+        </motion.div>
+      </div>
+
+      <div className="container-minimal">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Contact Information - Left Side */}
+          <div className="lg:col-span-1 space-y-6">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="card-minimal p-8 h-full bg-gray-50 border-none"
+            >
+              <h2 className="heading-3 mb-8 text-gray-900 font-bangla">
+                যোগাযোগের মাধ্যম
+              </h2>
+
+              <div className="space-y-8">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0 text-primary">
+                    <FaEnvelope className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1 font-bangla">
+                      ইমেইল
+                    </h3>
+                    <p className="body-text text-gray-600 break-all">
+                      {siteSettings?.contactEmail ||
+                        "support@buynestonline.com"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0 text-primary">
+                    <FaPhone className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1 font-bangla">
+                      ফোন
+                    </h3>
+                    <p className="body-text text-gray-600">
+                      {siteSettings?.contactPhone || "+880 1234-567890"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0 text-primary">
+                    <FaMapMarkerAlt className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1 font-bangla">
+                      অফিস
+                    </h3>
+                    <p className="body-text text-gray-600 font-bangla">
+                      {siteSettings?.address || "ঢাকা, বাংলাদেশ"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Map Placeholder or Decorative Element */}
+              <div className="mt-12 p-4 bg-white rounded-lg border border-gray-200 text-center">
+                <p className="text-small text-gray-500 font-bangla">
+                  অফিস সময়: সকাল ৯:০০ - সন্ধ্যা ৬:০০ (শনি-বৃহস্পতি)
+                </p>
+              </div>
+            </motion.div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-3 rounded-lg border ${errors.name ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                    } focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors`}
-                  placeholder="Your name"
-                />
-                {errors.name && <p className="text-sm textColor">{errors.name}</p>}
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                    } focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors`}
-                  placeholder="your@email.com"
-                />
-                {errors.email && <p className="text-sm textColor">{errors.email}</p>}
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-3 rounded-lg border ${errors.phone ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                    } focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors`}
-                  placeholder="Your phone number"
-                />
-                {errors.phone && <p className="text-sm textColor">{errors.phone}</p>}
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Subject</label>
-                <input
-                  type="text"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-3 rounded-lg border ${errors.subject ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                    } focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors`}
-                  placeholder="Message subject"
-                />
-                {errors.subject && <p className="text-sm textColor">{errors.subject}</p>}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
-              <textarea
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                rows="6"
-                className={`w-full px-4 py-3 rounded-lg border ${errors.message ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                  } focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors resize-none`}
-                placeholder="Your message..."
-              ></textarea>
-              {errors.message && <p className="text-sm textColor">{errors.message}</p>}
-            </div>
-
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                name="terms"
-                id="terms"
-                checked={formData.terms}
-                onChange={handleChange}
-                className={`w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500 ${errors.terms ? 'border-red-500' : ''
-                  }`}
-              />
-              <label htmlFor="terms" className="ml-2 text-sm text-gray-600 dark:text-gray-400">
-                I agree to the <a href="#" className="text-blue-500 hover:underline">Terms and Conditions</a> and{' '}
-                <a href="#" className="text-blue-500 hover:underline">Privacy Policy</a>
-              </label>
-            </div>
-            {errors.terms && <p className="text-sm textColor">{errors.terms}</p>}
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''
-                }`}
+          {/* Contact Form - Right Side */}
+          <div className="lg:col-span-2">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="card-minimal p-8 md:p-12"
             >
-              {isSubmitting ? (
-                <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Sending...
-                </>
-              ) : (
-                <>
-                  <FaPaperPlane className="w-5 h-5" />
-                  Send Message
-                </>
-              )}
-            </button>
-          </form>
-        </motion.div>
+              <h2 className="heading-2 mb-8 text-gray-900 font-bangla">
+                বার্তা পাঠান
+              </h2>
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-900 font-bangla">
+                      নাম
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className={`input-minimal ${
+                        errors.name ? "border-red-500" : ""
+                      }`}
+                      placeholder="আপনার নাম"
+                    />
+                    {errors.name && (
+                      <p className="text-xs text-red-500 mt-1 font-bangla">
+                        {errors.name}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-900 font-bangla">
+                      ইমেইল
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={`input-minimal ${
+                        errors.email ? "border-red-500" : ""
+                      }`}
+                      placeholder="আপনার ইমেইল"
+                    />
+                    {errors.email && (
+                      <p className="text-xs text-red-500 mt-1 font-bangla">
+                        {errors.email}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-900 font-bangla">
+                      ফোন
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className={`input-minimal ${
+                        errors.phone ? "border-red-500" : ""
+                      }`}
+                      placeholder="আপনার ফোন নম্বর"
+                    />
+                    {errors.phone && (
+                      <p className="text-xs text-red-500 mt-1 font-bangla">
+                        {errors.phone}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-900 font-bangla">
+                      বিষয়
+                    </label>
+                    <input
+                      type="text"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      className={`input-minimal ${
+                        errors.subject ? "border-red-500" : ""
+                      }`}
+                      placeholder="বার্তার বিষয়"
+                    />
+                    {errors.subject && (
+                      <p className="text-xs text-red-500 mt-1 font-bangla">
+                        {errors.subject}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-900 font-bangla">
+                    বার্তা
+                  </label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows="5"
+                    className={`input-minimal resize-none ${
+                      errors.message ? "border-red-500" : ""
+                    }`}
+                    placeholder="আমরা আপনাকে কীভাবে সাহায্য করতে পারি?"
+                  ></textarea>
+                  {errors.message && (
+                    <p className="text-xs text-red-500 mt-1 font-bangla">
+                      {errors.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-3 pt-2">
+                  <input
+                    type="checkbox"
+                    name="terms"
+                    id="terms"
+                    checked={formData.terms}
+                    onChange={handleChange}
+                    className={`w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary ${
+                      errors.terms ? "border-red-500" : ""
+                    }`}
+                  />
+                  <label
+                    htmlFor="terms"
+                    className="text-sm text-gray-600 font-bangla"
+                  >
+                    আমি{" "}
+                    <a href="#" className="text-primary hover:underline">
+                      শর্তাবলী
+                    </a>{" "}
+                    এবং গোপনীয়তা নীতির সাথে একমত
+                  </label>
+                </div>
+                {errors.terms && (
+                  <p className="text-xs text-red-500 font-bangla">
+                    {errors.terms}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="btn-minimal btn-primary w-full md:w-auto min-w-[180px] font-bangla gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center gap-2">
+                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                      পাঠানো হচ্ছে...
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-2">
+                      <FaPaperPlane className="w-4 h-4" />
+                      বার্তা পাঠান
+                    </span>
+                  )}
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        </div>
       </div>
     </div>
   );

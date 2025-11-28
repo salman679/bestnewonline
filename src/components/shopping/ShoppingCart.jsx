@@ -1,33 +1,45 @@
 import { useContext } from "react";
 import { CartContext } from "../../context/CartContext";
 import { Link, useNavigate } from "react-router-dom";
-import { FaTrash, FaPlus, FaMinus, FaShoppingBag, FaArrowLeft, FaTruck, FaShieldAlt, FaCreditCard } from "react-icons/fa";
+import {
+  FaTrash,
+  FaPlus,
+  FaMinus,
+  FaShoppingBag,
+  FaArrowLeft,
+  FaTruck,
+  FaShieldAlt,
+  FaCreditCard,
+} from "react-icons/fa";
 import { AuthContext } from "../../context/auth/AuthContext";
 // import AuthModal from "../auth/AuthModal";
 import { IndexContext } from "../../context";
 
 const ShoppingCart = () => {
-  const { cart, removeFromCart, updateQuantity, handleCheckout, } = useContext(CartContext);
+  const { cart, removeFromCart, updateQuantity, handleCheckout } =
+    useContext(CartContext);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  const { siteSettings } = useContext(IndexContext)
-
+  const { siteSettings } = useContext(IndexContext);
 
   const calculateDiscountedPrice = (price, discount) => {
     if (!discount) return price;
-    return price - (price * (discount / 100));
+    return price - price * (discount / 100);
   };
 
   const calculateSubtotal = () => {
     return cart.reduce((total, item) => {
-      const discountedPrice = calculateDiscountedPrice(item.price, item.discount);
-      return total + (discountedPrice * item.quantity);
+      const discountedPrice = calculateDiscountedPrice(
+        item.price,
+        item.discount
+      );
+      return total + discountedPrice * item.quantity;
     }, 0);
   };
 
   const shipping = siteSettings?.deliveryCharge; // Fixed shipping cost
   const subtotal = calculateSubtotal();
-  const total = subtotal
+  const total = subtotal;
 
   const formatPrice = (price) => {
     return price.toFixed(0);
@@ -40,12 +52,13 @@ const ShoppingCart = () => {
           <div className="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
             <FaShoppingBag className="w-10 h-10 text-gray-400" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Your cart is empty</h2>
-          <p className="text-gray-600 mb-8">Looks like you haven't added any items to your cart yet.</p>
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200"
-          >
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Your cart is empty
+          </h2>
+          <p className="text-gray-600 mb-8">
+            Looks like you haven't added any items to your cart yet.
+          </p>
+          <Link to="/" className="btn-minimal btn-primary gap-2">
             <FaArrowLeft />
             Continue Shopping
           </Link>
@@ -60,7 +73,9 @@ const ShoppingCart = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl max-[640px]:text-lg font-bold text-gray-900 dark:text-white">Shopping Cart</h1>
+            <h1 className="text-3xl max-[640px]:text-lg font-bold text-gray-900 dark:text-white">
+              Shopping Cart
+            </h1>
             <Link
               to="/"
               className="inline-flex max-[640px]:text-sm items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
@@ -74,7 +89,10 @@ const ShoppingCart = () => {
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
               {cart.map((item) => {
-                const discountedPrice = calculateDiscountedPrice(item.price, item.discount);
+                const discountedPrice = calculateDiscountedPrice(
+                  item.price,
+                  item.discount
+                );
                 const itemTotal = discountedPrice * item.quantity;
 
                 return (
@@ -82,27 +100,41 @@ const ShoppingCart = () => {
                     key={item.productId}
                     className="grid grid-cols-1 lg:grid-cols-2 min-[550px]:gap-6 border border-gray-200 rounded "
                   >
-                    <div
-                      className="flex items-center flex-col min-[550px]:flex-row gap-3 min-[550px]:gap-6 w-full max-xl:justify-center max-xl:max-w-xl max-xl:mx-auto">
-                      <div className="img-box min-[640px]:ms-6"><img src={item.image} alt={item.name} className="xl:w-[140px] rounded-xl object-cover max-[640px]:h-32  max-[640px]:w-96" /></div>
-                      <div className="pro-data p-6 max-[640px]:py-1  w-full max-[640px]:flex justify-between max-w-sm ">
-                        <h5 className="font-semibold text-xl leading-8 text-black max-[550px]:text-center">{item.name}
+                    <div className="flex items-center flex-col min-[550px]:flex-row gap-3 min-[550px]:gap-6 w-full max-xl:justify-center max-xl:max-w-xl max-xl:mx-auto">
+                      <div className="img-box min-[640px]:ms-6">
+                        <img
+                          src={
+                            item.image?.includes("ik.imagekit.io")
+                              ? `${item.image}?tr=w-140,h-140,f-webp,q-80`
+                              : item.image
+                          }
+                          alt={item.name}
+                          width={140}
+                          height={140}
+                          loading="lazy"
+                          decoding="async"
+                          className="xl:w-[140px] rounded-xl object-cover max-[640px]:h-32 max-[640px]:w-96"
+                        />
+                      </div>
+                      <div className="pro-data p-6 max-[640px]:py-1 w-full max-[640px]:flex justify-between max-w-sm ">
+                        <h5 className="font-semibold text-xl leading-8 text-black max-[550px]:text-center">
+                          {item.name}
                         </h5>
-                        <p
-                          className="font-normal text-lg leading-8 text-gray-500 my-2 min-[550px]:my-3 max-[550px]:text-center">
-                          {item.category}</p>
-                        <h6 className="font-medium text-lg leading-8 text-indigo-600  max-[550px]:text-center">{formatPrice(discountedPrice)}৳</h6>
+                        <p className="font-normal text-lg leading-8 text-gray-500 my-2 min-[550px]:my-3 max-[550px]:text-center">
+                          {item.category}
+                        </p>
+                        <h6 className="font-medium text-lg leading-8 text-indigo-600  max-[550px]:text-center">
+                          {formatPrice(discountedPrice)}৳
+                        </h6>
                       </div>
                     </div>
 
-
                     {/* Product Details */}
-                    <div className="flex-grow sm:mr-4 p-6 max-[640px]:py-1 ma">
+                    <div className="grow sm:mr-4 p-6 max-[640px]:py-1 ma">
                       <div className="flex justify-between items-start">
                         <div>
-
                           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                            SKU: {item.sku || 'N/A'}
+                            SKU: {item.sku || "N/A"}
                           </p>
                         </div>
                         <button
@@ -118,7 +150,12 @@ const ShoppingCart = () => {
                           {/* Quantity Controls */}
                           <div className="flex items-center border border-gray-200 dark:border-gray-700 rounded-lg">
                             <button
-                              onClick={() => updateQuantity(item.productId, Math.max(1, item.quantity - 1))}
+                              onClick={() =>
+                                updateQuantity(
+                                  item.productId,
+                                  Math.max(1, item.quantity - 1)
+                                )
+                              }
                               className="p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white text-sm sm:text-base transition-transform transform hover:scale-110"
                             >
                               <FaMinus className="w-4 h-4" />
@@ -127,7 +164,12 @@ const ShoppingCart = () => {
                               {item.quantity}
                             </span>
                             <button
-                              onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                              onClick={() =>
+                                updateQuantity(
+                                  item.productId,
+                                  item.quantity + 1
+                                )
+                              }
                               className="p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white text-sm sm:text-base transition-transform transform hover:scale-110"
                             >
                               <FaPlus className="w-4 h-4" />
@@ -139,7 +181,7 @@ const ShoppingCart = () => {
                             {/* Discount Badge */}
                             {item.discount > 0 && (
                               <span className="text-sm text-white bg-red-600 rounded-full px-2 py-1">
-                                {(item.discount).toFixed(0)}% OFF
+                                {item.discount.toFixed(0)}% OFF
                               </span>
                             )}
                             <div>
@@ -160,11 +202,9 @@ const ShoppingCart = () => {
                       </div>
                     </div>
                   </div>
-
                 );
               })}
             </div>
-
 
             {/* Order Summary */}
             <div className="lg:col-span-1 mt-8 lg:mt-0">
@@ -175,14 +215,18 @@ const ShoppingCart = () => {
 
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 dark:text-gray-400">Subtotal</span>
+                    <span className="text-gray-600 dark:text-gray-400">
+                      Subtotal
+                    </span>
                     <span className="text-gray-900 dark:text-white font-medium">
                       {formatPrice(subtotal)}৳
                     </span>
                   </div>
                   <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-lg font-bold text-gray-900 dark:text-white">Total</span>
+                      <span className="text-lg font-bold text-gray-900 dark:text-white">
+                        Total
+                      </span>
                       <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
                         {formatPrice(total)}৳
                       </span>
@@ -209,7 +253,7 @@ const ShoppingCart = () => {
                 {/* Checkout Button */}
                 <button
                   onClick={() => handleCheckout(user, navigate)}
-                  className="mt-8 w-full bg-orange-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-orange-600 transition-colors duration-200 flex items-center justify-center gap-2"
+                  className="btn-minimal btn-primary mt-8 w-full gap-2"
                   disabled={cart.length === 0}
                 >
                   Proceed to Checkout

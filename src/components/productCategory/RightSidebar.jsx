@@ -344,7 +344,7 @@ const RightSidebar = () => {
             </p>
             <button
               onClick={handleBrowseAllProducts}
-              className="mt-6 px-6 py-2 bgColor text-white rounded-lg hover:bg-teal-600 transition-colors cursor-pointer"
+              className="btn-minimal btn-primary mt-6"
             >
               Browse All Products
             </button>

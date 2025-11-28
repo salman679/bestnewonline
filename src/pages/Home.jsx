@@ -133,7 +133,7 @@ const Home = () => {
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="aspect-[4/5] rounded-lg animate-pulse"
+                    className="aspect-4/5 rounded-lg animate-pulse"
                     style={{ backgroundColor: "var(--color-bg-light)" }}
                   ></div>
                 ))}
@@ -151,14 +151,22 @@ const Home = () => {
                     onClick={() => handleCategoryClick(category.category)}
                   >
                     <div
-                      className="aspect-[4/5] relative overflow-hidden"
+                      className="aspect-4/5 relative overflow-hidden"
                       style={{
                         borderRadius: "var(--radius-lg) var(--radius-lg) 0 0",
                       }}
                     >
                       <img
-                        src={category.image || "/images/placeholder.jpg"}
+                        src={
+                          category.image?.includes("ik.imagekit.io")
+                            ? `${category.image}?tr=w-300,h-375,f-webp,q-80`
+                            : category.image || "/images/placeholder.jpg"
+                        }
                         alt={category.category}
+                        width={300}
+                        height={375}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
@@ -277,11 +285,10 @@ const Home = () => {
 
         {/* Why Choose Us Section - Ultra Minimal */}
         <section
-          className="section-spacing"
+          className="section-spacing p-6 md:p-12"
           style={{
             backgroundColor: "var(--color-bg-soft)",
             borderRadius: "var(--radius-xl)",
-            padding: "var(--space-2xl)",
           }}
         >
           <div className="mx-auto">
@@ -305,7 +312,7 @@ const Home = () => {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-[640px]:gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-[640px]:gap-4">
               {features.map((feature, index) => (
                 <motion.div
                   key={index}

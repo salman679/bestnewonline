@@ -10,7 +10,6 @@ import {
   FaBoxOpen,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-// import AuthModal from "../auth/AuthModal"
 import { toast } from "react-hot-toast";
 
 // Utility function to calculate discounted price
@@ -27,8 +26,6 @@ const SidebarCart = () => {
     removeFromCart,
     updateQuantity,
     handleCheckout,
-    isAuthModalOpen,
-    setIsAuthModalOpen,
   } = useContext(CartContext);
   const { user } = useContext(AuthContext);
   const location = useLocation();
@@ -57,10 +54,6 @@ const SidebarCart = () => {
     toast.success("Item removed from cart");
   };
 
-  const formatPrice = (price) => {
-    return price;
-  };
-
   return (
     <>
       <AnimatePresence>
@@ -75,157 +68,51 @@ const SidebarCart = () => {
                 ${location.pathname === "/shopping-cart" && "hidden"} 
                 max-md:w-full max-md:max-w-none`}
             >
-              <div
-                style={{
-                  height: "100vh",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
+              <div className="h-screen flex flex-col">
                 {/* Header - Ultra Modern */}
-                <div
-                  style={{
-                    padding: "24px",
-                    borderBottom: "1px solid #F0F0F0",
-                    backgroundColor: "#FFFFFF",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "12px",
-                      }}
-                    >
-                      <div style={{ position: "relative" }}>
-                        <FaShoppingCart
-                          style={{ fontSize: "24px", color: "#016737" }}
-                        />
+                <div className="p-6 border-b border-[#F0F0F0] bg-white">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <FaShoppingCart className="text-2xl text-primary" />
                         {cart.length > 0 && (
-                          <span
-                            style={{
-                              position: "absolute",
-                              top: "-8px",
-                              right: "-8px",
-                              backgroundColor: "#016737",
-                              color: "#FFFFFF",
-                              fontSize: "11px",
-                              fontWeight: "700",
-                              width: "20px",
-                              height: "20px",
-                              borderRadius: "50%",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                          >
+                          <span className="absolute -top-2 -right-2 bg-primary text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
                             {cart.length}
                           </span>
                         )}
                       </div>
-                      <h2
-                        style={{
-                          fontSize: "20px",
-                          fontWeight: "600",
-                          fontFamily: "Hind Siliguri, sans-serif",
-                          color: "#1A1A1A",
-                        }}
-                      >
+                      <h2 className="text-xl font-semibold font-bangla text-[#1A1A1A]">
                         কার্ট
                       </h2>
                     </div>
                     <button
                       onClick={() => setIsCartOpen(false)}
-                      style={{
-                        padding: "8px",
-                        backgroundColor: "transparent",
-                        border: "none",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        transition: "all 0.2s ease",
-                      }}
-                      className="hover:bg-[#F5F5F5]"
+                      className="p-2 bg-transparent border-none rounded-lg cursor-pointer transition-all duration-200 hover:bg-[#F5F5F5]"
                       aria-label="Close cart"
                     >
-                      <FaTimes style={{ fontSize: "20px", color: "#666666" }} />
+                      <FaTimes className="text-xl text-[#666666]" />
                     </button>
                   </div>
-                  <p
-                    style={{
-                      fontSize: "13px",
-                      color: "#999999",
-                      marginTop: "8px",
-                      fontFamily: "Hind Siliguri, sans-serif",
-                    }}
-                  >
+                  <p className="text-[13px] text-[#999999] mt-2 font-bangla">
                     {cart.length}টি পণ্য
                   </p>
                 </div>
 
                 {/* Product List - Modern Scroll */}
-                <div style={{ flex: 1, overflowY: "auto", padding: "16px" }}>
+                <div className="flex-1 overflow-y-auto p-4">
                   {cart.length === 0 ? (
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        height: "100%",
-                        textAlign: "center",
-                        padding: "48px 24px",
-                      }}
-                    >
-                      <FaBoxOpen
-                        style={{
-                          fontSize: "64px",
-                          color: "#E0E0E0",
-                          marginBottom: "16px",
-                        }}
-                      />
-                      <p
-                        style={{
-                          fontSize: "16px",
-                          fontWeight: "500",
-                          color: "#666666",
-                          fontFamily: "Hind Siliguri, sans-serif",
-                          marginBottom: "8px",
-                        }}
-                      >
+                    <div className="flex flex-col items-center justify-center h-full text-center p-12">
+                      <FaBoxOpen className="text-6xl text-[#E0E0E0] mb-4" />
+                      <p className="text-base font-medium text-[#666666] font-bangla mb-2">
                         আপনার কার্ট খালি
                       </p>
-                      <p
-                        style={{
-                          fontSize: "14px",
-                          color: "#999999",
-                          marginBottom: "24px",
-                        }}
-                      >
+                      <p className="text-sm text-[#999999] mb-6">
                         কেনাকাটা শুরু করুন
                       </p>
                       <Link
                         to="/product-category"
                         onClick={() => setIsCartOpen(false)}
-                        style={{
-                          padding: "12px 24px",
-                          backgroundColor: "#016737",
-                          color: "#FFFFFF",
-                          borderRadius: "8px",
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          fontFamily: "Hind Siliguri, sans-serif",
-                          textDecoration: "none",
-                          display: "inline-block",
-                          transition: "all 0.2s ease",
-                        }}
-                        className="hover:opacity-90"
+                        className="px-6 py-3 bg-primary text-white rounded-lg text-sm font-semibold font-bangla no-underline inline-block transition-all duration-200 hover:opacity-90"
                       >
                         কেনাকাটা করুন
                       </Link>
@@ -248,10 +135,18 @@ const SidebarCart = () => {
                             transition={{ delay: index * 0.1 }}
                             className="flex items-center border border-gray-300 gap-4 p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
                           >
-                            <div className="relative flex-shrink-0">
+                            <div className="relative shrink-0">
                               <img
-                                src={item.image}
+                                src={
+                                  item.image?.includes("ik.imagekit.io")
+                                    ? `${item.image}?tr=w-100,h-100,f-webp,q-80`
+                                    : item.image
+                                }
                                 alt={item.name}
+                                width={96}
+                                height={96}
+                                loading="lazy"
+                                decoding="async"
                                 className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg shadow-sm"
                               />
                               {item.discount > 0 && (
@@ -298,11 +193,8 @@ const SidebarCart = () => {
 
                               <div className="mt-3 space-y-1">
                                 <div className="flex items-center gap-2">
-                                  <div className="text-base sm:text-lg font-bold textColor">
-                                    Total:{" "}
-                                    {formatPrice(
-                                      itemTotal + 0.009999999999779296
-                                    ).toFixed(0)}
+                                  <div className="text-base sm:text-lg font-bold text-primary">
+                                    Total: {Math.round(itemTotal).toFixed(0)}
                                     <span className="text-xl font-bold">৳</span>
                                   </div>
                                 </div>
@@ -311,7 +203,7 @@ const SidebarCart = () => {
 
                             <button
                               onClick={() => handleRemoveItem(item.productId)}
-                              className="p-2 max-[640px]:-mt-9 textColor hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                              className="p-2 max-[640px]:-mt-9 text-primary hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                               aria-label="Remove item"
                             >
                               <FaTrash className="w-5 h-5" />
@@ -330,10 +222,8 @@ const SidebarCart = () => {
                       <span className="text-gray-600 dark:text-gray-400 font-medium">
                         Subtotal:
                       </span>
-                      <span className="text-2xl font-bold textColor">
-                        {formatPrice(
-                          calculateSubtotal() + 0.009999999999779296
-                        ).toFixed(0)}
+                      <span className="text-2xl font-bold text-primary">
+                        {Math.round(calculateSubtotal()).toFixed(0)}
                         <span className="text-xl font-bold">৳</span>
                       </span>
                     </div>
@@ -341,28 +231,22 @@ const SidebarCart = () => {
                       <Link to="/shopping-cart" className="block">
                         <button
                           onClick={() => setIsCartOpen(false)}
-                          className="w-full py-2 px-6 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center gap-2"
+                          className="btn-minimal btn-outline w-full font-bangla gap-2"
                         >
-                          View Cart
+                          কার্ট দেখুন
                           <FaArrowRight />
                         </button>
                       </Link>
                       <button
                         onClick={() => handleCheckout(user, navigate)}
-                        className="w-full py-2 px-6 bgColor text-white rounded-lg hover:bgColor transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="btn-minimal btn-primary w-full font-bangla gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={cart.length === 0}
                       >
-                        Proceed to Checkout
+                        চেকআউট করুন
                       </button>
                     </div>
                   </div>
                 )}
-                {/* Promo Code */}
-                <div className="p-4 sm:p-6 border-t dark:border-gray-700 bg-white dark:bg-gray-900">
-                  <div className="flex items-center gap-4">
-                    <button className="py-2 px-6 rounded-lg bg-transparent transition-colors"></button>
-                  </div>
-                </div>
               </div>
             </motion.div>
 
@@ -378,13 +262,6 @@ const SidebarCart = () => {
           </>
         )}
       </AnimatePresence>
-
-      {/* Auth Modal
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        redirectTo="/checkout"
-      /> */}
     </>
   );
 };

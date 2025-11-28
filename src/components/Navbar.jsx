@@ -1,6 +1,4 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import logo from "../assets/buynestonline.jpg";
-import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu } from "react-icons/fi";
 import { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -10,21 +8,14 @@ import {
   FaShoppingCart,
   FaHeart,
   FaUser,
-  FaSearch,
-  FaChevronDown,
   FaShoppingBag,
   FaEnvelope,
-  FaCog,
   FaSignOutAlt,
   FaTachometerAlt,
   FaUserCircle,
-  FaBell,
-  FaQuestionCircle,
-  FaShieldAlt,
   FaTimes,
 } from "react-icons/fa";
 import Menu from "./menu-sidebar/Menu";
-import LogIn from "./auth/LogIn";
 import { CartContext } from "../context/CartContext";
 import SidebarCart from "./shopping/SidebarCart";
 import { AuthContext } from "../context/auth/AuthContext";
@@ -32,26 +23,19 @@ import Search from "./Search";
 import { axiosInstance } from "../lib/axiosInstanace";
 import { useDispatch } from "react-redux";
 import { fetchProducts } from "../redux/features/products/productSlice";
-import { IndexContext } from "../context";
-import { BiSolidCategoryAlt } from "react-icons/bi";
-import { FcShop } from "react-icons/fc";
 import { WishlistContext } from "../context/WishlistContext";
 
 const Navbar = () => {
   const location = useLocation();
-  const categorypath = location.pathname.split("/")[2];
-  const subCategory = location.pathname.split("/")[3];
   const path = location.pathname;
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
   const navigate = useNavigate();
   const [profileDrop, setProfileDrop] = useState(false);
   const [mobileProfileDrop, setMobileProfileDrop] = useState(false);
-  const [open, setOpen] = useState(false);
   const { isCartOpen, setIsCartOpen, cart } = useContext(CartContext);
   const { wishlist } = useContext(WishlistContext);
   const { logOut } = useContext(AuthContext);
-  const { siteSettings } = useContext(IndexContext);
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
@@ -59,7 +43,6 @@ const Navbar = () => {
     toast.success("Logged out successfully");
     navigate("/login");
   };
-
   const { user, isLoading } = useContext(AuthContext);
 
   // Profie dropDown menu setups
@@ -121,33 +104,14 @@ const Navbar = () => {
 
   return (
     <>
-      <header
-        className="sticky top-0 z-50"
-        style={{
-          backgroundColor: "#FFFFFF",
-          borderBottom: "1px solid #F0F0F0",
-          boxShadow: "none",
-        }}
-      >
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-none">
         {/* Main Header Section - Ultra Modern Premium */}
-        <div
-          style={{ maxWidth: "1440px", margin: "0 auto", padding: "0 24px" }}
-        >
-          <div
-            className="flex items-center justify-between gap-8"
-            style={{ height: "80px" }}
-          >
+        <div className="max-w-[1440px] mx-auto px-6">
+          <div className="flex items-center justify-between gap-8 h-20">
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMenu}
-              className="lg:hidden"
-              style={{
-                background: "none",
-                border: "none",
-                color: "#1A1A1A",
-                cursor: "pointer",
-                padding: "8px",
-              }}
+              className="lg:hidden bg-none border-none text-[#1A1A1A] cursor-pointer p-2"
             >
               <FiMenu className="w-6 h-6" />
             </button>
@@ -157,8 +121,7 @@ const Navbar = () => {
               <img
                 src="/logo.png"
                 alt="BuyNest"
-                className="max-[640px]:w-24"
-                style={{ height: "40px", width: "auto" }}
+                className="max-[640px]:w-24 h-10 w-auto"
               />
             </Link>
 
@@ -166,19 +129,11 @@ const Navbar = () => {
             <div className="flex-1 flex items-center justify-center gap-6 mx-8 max-[1024px]:hidden">
               <Link
                 to={"/"}
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "500",
-                  fontFamily: "Hind Siliguri, sans-serif",
-                  color: path === "/" ? "#016737" : "#666666",
-                  textDecoration: "none",
-                  padding: "8px 12px",
-                  borderRadius: "6px",
-                  backgroundColor: path === "/" ? "#F0FDF4" : "transparent",
-                  transition: "all 0.2s ease",
-                  whiteSpace: "nowrap",
-                }}
-                className="hover:bg-gray-50"
+                className={`text-sm font-medium font-bangla px-3 py-2 rounded-md transition-all duration-200 whitespace-nowrap hover:bg-gray-50 no-underline ${
+                  path === "/"
+                    ? "text-primary bg-green-50"
+                    : "text-gray-500 bg-transparent"
+                }`}
               >
                 হোম
               </Link>
@@ -187,13 +142,7 @@ const Navbar = () => {
                   {[...Array(3)].map((_, i) => (
                     <div
                       key={i}
-                      style={{
-                        height: "20px",
-                        width: "80px",
-                        backgroundColor: "#F0F0F0",
-                        borderRadius: "4px",
-                        animation: "pulse 1.5s ease-in-out infinite",
-                      }}
+                      className="h-5 w-20 bg-gray-100 rounded animate-pulse"
                     ></div>
                   ))}
                 </div>
@@ -205,31 +154,14 @@ const Navbar = () => {
                       .split(" ")
                       .join("-")}`}
                     onClick={() => handleCategoryClick(category.category)}
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      fontFamily: "Hind Siliguri, sans-serif",
-                      color:
-                        path ===
-                        `/product-category/${category.category
-                          .split(" ")
-                          .join("-")}`
-                          ? "#016737"
-                          : "#666666",
-                      textDecoration: "none",
-                      padding: "8px 12px",
-                      borderRadius: "6px",
-                      backgroundColor:
-                        path ===
-                        `/product-category/${category.category
-                          .split(" ")
-                          .join("-")}`
-                          ? "#F0FDF4"
-                          : "transparent",
-                      transition: "all 0.2s ease",
-                      whiteSpace: "nowrap",
-                    }}
-                    className="hover:bg-gray-50"
+                    className={`text-sm font-medium font-bangla px-3 py-2 rounded-md transition-all duration-200 whitespace-nowrap hover:bg-gray-50 no-underline ${
+                      path ===
+                      `/product-category/${category.category
+                        .split(" ")
+                        .join("-")}`
+                        ? "text-primary bg-green-50"
+                        : "text-gray-500 bg-transparent"
+                    }`}
                   >
                     {category.category}
                   </Link>
@@ -238,7 +170,7 @@ const Navbar = () => {
             </div>
 
             {/* Search Bar - Right Side (Compact) */}
-            <div className="max-[1024px]:hidden" style={{ width: "280px" }}>
+            <div className="max-[1024px]:hidden w-[280px]">
               <Search />
             </div>
 
@@ -261,98 +193,85 @@ const Navbar = () => {
 
                         {/* Dropdown menu */}
                         {profileDrop && (
-                          <ul
-                            ref={dropdownRef}
-                            className="max-[640px]:hidden overflow-y-auto"
-                          >
-                            <div className="absolute z-[60] right-0 max-[640px]:max-w-[250px] max-[640px]:max-h-[600px] overflow-y-auto duration-300 w-80 p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg">
+                          <ul ref={dropdownRef} className="max-[640px]:hidden">
+                            <div className="absolute z-[60] right-0 mt-2 w-[280px] p-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-xl animate-in fade-in zoom-in duration-200 origin-top-right">
                               {/* User Info Section */}
-                              <div className="flex items-center gap-4 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
-                                <div className="relative">
-                                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-blue-500">
+                              <div className="flex items-center gap-3 pb-4 mb-2 border-b border-gray-100 dark:border-gray-700">
+                                <div className="relative shrink-0">
+                                  <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-gray-100 dark:ring-gray-700">
                                     <img
-                                      src={user?.photoURL}
+                                      src={user?.photoURL || avatar}
                                       alt={user?.displayName}
                                       className="w-full h-full object-cover"
                                     />
                                   </div>
-                                  <div className="absolute -bottom-1 -right-1 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-gray-800"></div>
+                                  <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-white dark:ring-gray-800"></div>
                                 </div>
-                                <div>
-                                  <h6 className="font-semibold text-gray-900 dark:text-white text-lg">
+                                <div className="min-w-0">
+                                  <h6 className="font-semibold text-gray-900 dark:text-white text-sm truncate font-bangla">
                                     {user?.displayName}
                                   </h6>
-                                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    {user?.Database?.email}
+                                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                    {user?.email || user?.Database?.email}
                                   </p>
                                 </div>
                               </div>
 
                               {/* Main Menu */}
-                              <div className="">
-                                <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                                  Menu
+                              <div className="mb-2">
+                                <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2 px-2 font-bangla">
+                                  মেনু
                                 </h3>
                                 <div className="space-y-1">
                                   {user?.Database?.role === "admin" && (
                                     <Link
                                       to="/admin-dashboard"
-                                      onClick={profileHandle}
-                                      className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
-                                        path === "/admin-dashboard"
-                                          ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
-                                          : "hover:bg-gray-50 dark:hover:bg-gray-700"
-                                      }`}
+                                      onClick={() => setProfileDrop(false)}
+                                      className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors font-medium font-bangla"
                                     >
-                                      <FaTachometerAlt className="w-5 h-5" />
-                                      <span className="font-medium">
-                                        Dashboard
-                                      </span>
+                                      <FaTachometerAlt className="w-4 h-4 text-blue-500" />
+                                      ড্যাশবোর্ড
                                     </Link>
                                   )}
                                   <Link
                                     to="/my-profile"
-                                    onClick={profileHandle}
-                                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                    onClick={() => setProfileDrop(false)}
+                                    className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors font-medium font-bangla"
                                   >
-                                    <FaUserCircle className="w-5 h-5 text-purple-500" />
-                                    <span className="text-gray-700 dark:text-gray-300">
-                                      My Profile
-                                    </span>
+                                    <FaUserCircle className="w-4 h-4 text-purple-500" />
+                                    প্রোফাইল
                                   </Link>
-                                </div>
-                              </div>
-
-                              {/* Support & Settings */}
-                              <div className="">
-                                <div className="space-y-1">
+                                  <Link
+                                    to="/my-orders"
+                                    onClick={() => setProfileDrop(false)}
+                                    className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors font-medium font-bangla"
+                                  >
+                                    <FaShoppingBag className="w-4 h-4 text-orange-500" />
+                                    আমার অর্ডার
+                                  </Link>
                                   <Link
                                     to="/contact-us"
-                                    onClick={profileHandle}
-                                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                    onClick={() => setProfileDrop(false)}
+                                    className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors font-medium font-bangla"
                                   >
-                                    <FaEnvelope className="w-5 h-5 text-green-500" />
-                                    <span className="text-gray-700 dark:text-gray-300">
-                                      Contact Us
-                                    </span>
+                                    <FaEnvelope className="w-4 h-4 text-green-500" />
+                                    যোগাযোগ করুন
                                   </Link>
                                 </div>
                               </div>
 
-                              {/* Security &  */}
+                              {/* Logout */}
                               <div>
-                                <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                                  Logout
+                                <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2 px-2 font-bangla">
+                                  অ্যাকাউন্ট
                                 </h3>
-                                <div className="space-y-1">
-                                  <button
-                                    onClick={handleLogout}
-                                    className="w-full flex items-center gap-3 p-3 rounded-lg textColor hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-                                  >
-                                    <FaSignOutAlt className="w-5 h-5" />
-                                    <span className="font-medium">Log Out</span>
-                                  </button>
-                                </div>
+                                <button
+                                  onClick={handleLogout}
+                                  className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors font-medium font-bangla"
+                                >
+                                  <FaSignOutAlt className="w-4 h-4" />
+                                  লগ আউট
+                                </button>
                               </div>
                             </div>
                           </ul>
@@ -369,15 +288,9 @@ const Navbar = () => {
                 {/* Wishlist Icon */}
                 <Link className="max-[1000px]:hidden" to={"/wishlist"}>
                   <div className="relative">
-                    <FaHeart
-                      className="w-5 h-5 cursor-pointer transition-colors"
-                      style={{ color: "var(--color-text-secondary)" }}
-                    />
+                    <FaHeart className="w-5 h-5 cursor-pointer transition-colors text-[var(--color-text-secondary)]" />
                     {wishlist.length > 0 && (
-                      <div
-                        className="w-4 h-4 absolute -top-2 -right-2 text-white text-[10px] rounded-full flex justify-center items-center font-semibold"
-                        style={{ backgroundColor: "var(--color-primary)" }}
-                      >
+                      <div className="w-4 h-4 absolute -top-2 -right-2 text-white text-[10px] rounded-full flex justify-center items-center font-semibold bg-primary">
                         <span>{wishlist.length}</span>
                       </div>
                     )}
@@ -394,15 +307,9 @@ const Navbar = () => {
                   }}
                 >
                   <div className="relative">
-                    <FaShoppingCart
-                      className="w-5 h-5 transition-colors"
-                      style={{ color: "var(--color-text-secondary)" }}
-                    />
+                    <FaShoppingCart className="w-5 h-5 transition-colors text-[var(--color-text-secondary)]" />
                     {cart.length > 0 && (
-                      <div
-                        className="w-4 h-4 absolute -top-2 -right-2 text-white text-[10px] rounded-full flex justify-center items-center font-semibold"
-                        style={{ backgroundColor: "var(--color-primary)" }}
-                      >
+                      <div className="w-4 h-4 absolute -top-2 -right-2 text-white text-[10px] rounded-full flex justify-center items-center font-semibold bg-primary">
                         <span>{cart.length}</span>
                       </div>
                     )}
@@ -424,19 +331,8 @@ const Navbar = () => {
       </header>
 
       {/* Mobile Bottom Navigation Bar - Premium Floating Island Design */}
-      <div
-        className="fixed sm:hidden z-50 bottom-4 left-4 right-4 rounded-2xl"
-        style={{
-          backgroundColor: "rgba(255, 255, 255, 0.95)",
-          backdropFilter: "blur(12px)",
-          border: "1px solid rgba(255, 255, 255, 0.5)",
-          boxShadow: "0 10px 40px -10px rgba(0, 0, 0, 0.15)",
-        }}
-      >
-        <div
-          className="grid grid-cols-5 w-full items-center justify-items-center"
-          style={{ height: "70px" }}
-        >
+      <div className="fixed sm:hidden z-50 bottom-4 left-4 right-4 rounded-2xl bg-white/95 backdrop-blur-md border border-white/50 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)]">
+        <div className="grid grid-cols-5 w-full items-center justify-items-center h-[70px]">
           {/* Category */}
           {isOpen ? (
             <button
@@ -445,26 +341,13 @@ const Navbar = () => {
               className="inline-flex flex-col items-center justify-center gap-1 active:scale-90 transition-all duration-300"
             >
               <div
-                className="p-1.5 rounded-full transition-colors"
-                style={{
-                  backgroundColor: isOpen
-                    ? "rgba(1, 103, 55, 0.1)"
-                    : "transparent",
-                }}
+                className={`p-1.5 rounded-full transition-colors ${
+                  isOpen ? "bg-primary/10" : "bg-transparent"
+                }`}
               >
-                <TbCategoryMinus
-                  className="w-6 h-6"
-                  style={{ color: "#016737" }}
-                />
+                <TbCategoryMinus className="w-6 h-6 text-primary" />
               </div>
-              <span
-                style={{
-                  fontSize: "11px",
-                  fontWeight: "600",
-                  fontFamily: "Hind Siliguri, sans-serif",
-                  color: "#016737",
-                }}
-              >
+              <span className="text-[11px] font-semibold font-bangla text-primary">
                 বন্ধ করুন
               </span>
             </button>
@@ -474,23 +357,10 @@ const Navbar = () => {
               type="button"
               className="inline-flex flex-col items-center justify-center gap-1 active:scale-90 transition-all duration-300"
             >
-              <div
-                className="p-1.5 rounded-full transition-colors"
-                style={{ backgroundColor: "transparent" }}
-              >
-                <TbCategoryPlus
-                  className="w-6 h-6"
-                  style={{ color: "#6B7280" }}
-                />
+              <div className="p-1.5 rounded-full transition-colors bg-transparent">
+                <TbCategoryPlus className="w-6 h-6 text-gray-500" />
               </div>
-              <span
-                style={{
-                  fontSize: "11px",
-                  fontWeight: "600",
-                  fontFamily: "Hind Siliguri, sans-serif",
-                  color: "#6B7280",
-                }}
-              >
+              <span className="text-[11px] font-semibold font-bangla text-gray-500">
                 ক্যাটাগরি
               </span>
             </button>
@@ -503,37 +373,25 @@ const Navbar = () => {
             onClick={() => (setIsCartOpen(false), setMobileProfileDrop(false))}
           >
             <div
-              className="relative p-1.5 rounded-full transition-colors"
-              style={{
-                backgroundColor:
-                  path === "/wishlist"
-                    ? "rgba(1, 103, 55, 0.1)"
-                    : "transparent",
-              }}
+              className={`relative p-1.5 rounded-full transition-colors ${
+                path === "/wishlist" ? "bg-primary/10" : "bg-transparent"
+              }`}
             >
               <FaHeart
-                className="w-5 h-5"
-                style={{ color: path === "/wishlist" ? "#016737" : "#6B7280" }}
+                className={`w-5 h-5 ${
+                  path === "/wishlist" ? "text-primary" : "text-gray-500"
+                }`}
               />
               {wishlist.length > 0 && (
-                <div
-                  className="w-4 h-4 absolute -top-1 -right-1 text-white text-[10px] rounded-full flex justify-center font-bold items-center shadow-sm"
-                  style={{
-                    backgroundColor: "#DC2626",
-                    border: "2px solid white",
-                  }}
-                >
+                <div className="w-4 h-4 absolute -top-1 -right-1 text-white text-[10px] rounded-full flex justify-center font-bold items-center shadow-sm bg-red-600 border-2 border-white">
                   <span>{wishlist.length}</span>
                 </div>
               )}
             </div>
             <span
-              style={{
-                fontSize: "11px",
-                fontWeight: "600",
-                fontFamily: "Hind Siliguri, sans-serif",
-                color: path === "/wishlist" ? "#016737" : "#6B7280",
-              }}
+              className={`text-[11px] font-semibold font-bangla ${
+                path === "/wishlist" ? "text-primary" : "text-gray-500"
+              }`}
             >
               পছন্দের
             </span>
@@ -549,45 +407,31 @@ const Navbar = () => {
             }}
           >
             <div
-              className="relative p-1.5 rounded-full transition-colors"
-              style={{
-                backgroundColor:
-                  isCartOpen || path === "/shopping-cart"
-                    ? "rgba(1, 103, 55, 0.1)"
-                    : "transparent",
-              }}
+              className={`relative p-1.5 rounded-full transition-colors ${
+                isCartOpen || path === "/shopping-cart"
+                  ? "bg-primary/10"
+                  : "bg-transparent"
+              }`}
             >
               <FaShoppingCart
-                className="w-5 h-5"
-                style={{
-                  color:
-                    isCartOpen || path === "/shopping-cart"
-                      ? "#016737"
-                      : "#6B7280",
-                }}
+                className={`w-5 h-5 ${
+                  isCartOpen || path === "/shopping-cart"
+                    ? "text-primary"
+                    : "text-gray-500"
+                }`}
               />
               {cart.length > 0 && (
-                <div
-                  className="w-4 h-4 absolute -top-1 -right-1 text-white text-[10px] rounded-full flex justify-center items-center font-bold shadow-sm"
-                  style={{
-                    backgroundColor: "#DC2626",
-                    border: "2px solid white",
-                  }}
-                >
+                <div className="w-4 h-4 absolute -top-1 -right-1 text-white text-[10px] rounded-full flex justify-center items-center font-bold shadow-sm bg-red-600 border-2 border-white">
                   <span>{cart.length}</span>
                 </div>
               )}
             </div>
             <span
-              style={{
-                fontSize: "11px",
-                fontWeight: "600",
-                fontFamily: "Hind Siliguri, sans-serif",
-                color:
-                  isCartOpen || path === "/shopping-cart"
-                    ? "#016737"
-                    : "#6B7280",
-              }}
+              className={`text-[11px] font-semibold font-bangla ${
+                isCartOpen || path === "/shopping-cart"
+                  ? "text-primary"
+                  : "text-gray-500"
+              }`}
             >
               কার্ট
             </span>
@@ -599,31 +443,26 @@ const Navbar = () => {
             className="inline-flex flex-col items-center justify-center gap-1 active:scale-90 transition-all duration-300"
           >
             <div
-              className="p-1.5 rounded-full transition-colors"
-              style={{
-                backgroundColor: path.includes("/product-category")
-                  ? "rgba(1, 103, 55, 0.1)"
-                  : "transparent",
-              }}
+              className={`p-1.5 rounded-full transition-colors ${
+                path.includes("/product-category")
+                  ? "bg-primary/10"
+                  : "bg-transparent"
+              }`}
             >
               <FaShoppingBag
-                className="w-5 h-5"
-                style={{
-                  color: path.includes("/product-category")
-                    ? "#016737"
-                    : "#6B7280",
-                }}
+                className={`w-5 h-5 ${
+                  path.includes("/product-category")
+                    ? "text-primary"
+                    : "text-gray-500"
+                }`}
               />
             </div>
             <span
-              style={{
-                fontSize: "11px",
-                fontWeight: "600",
-                fontFamily: "Hind Siliguri, sans-serif",
-                color: path.includes("/product-category")
-                  ? "#016737"
-                  : "#6B7280",
-              }}
+              className={`text-[11px] font-semibold font-bangla ${
+                path.includes("/product-category")
+                  ? "text-primary"
+                  : "text-gray-500"
+              }`}
             >
               শপ
             </span>
@@ -638,20 +477,15 @@ const Navbar = () => {
               >
                 <img
                   className={`w-7 h-7 object-cover border-2 cursor-pointer rounded-full transition-all ${
-                    mobileProfileDrop
-                      ? "border-[#016737]"
-                      : "border-transparent"
+                    mobileProfileDrop ? "border-primary" : "border-transparent"
                   }`}
                   src={`${user?.photoURL ? user?.photoURL : avatar}`}
                   alt="Profile"
                 />
                 <span
-                  style={{
-                    fontSize: "11px",
-                    fontWeight: "600",
-                    fontFamily: "Hind Siliguri, sans-serif",
-                    color: mobileProfileDrop ? "#016737" : "#6B7280",
-                  }}
+                  className={`text-[11px] font-semibold font-bangla ${
+                    mobileProfileDrop ? "text-primary" : "text-gray-500"
+                  }`}
                 >
                   প্রোফাইল
                 </span>
@@ -766,24 +600,20 @@ const Navbar = () => {
               className="inline-flex flex-col items-center justify-center gap-1 active:scale-90 transition-all duration-300"
             >
               <div
-                className="p-1.5 rounded-full transition-colors"
-                style={{
-                  backgroundColor:
-                    path === "/login" ? "rgba(1, 103, 55, 0.1)" : "transparent",
-                }}
+                className={`p-1.5 rounded-full transition-colors ${
+                  path === "/login" ? "bg-primary/10" : "bg-transparent"
+                }`}
               >
                 <FaUser
-                  className="w-5 h-5"
-                  style={{ color: path === "/login" ? "#016737" : "#6B7280" }}
+                  className={`w-5 h-5 ${
+                    path === "/login" ? "text-primary" : "text-gray-500"
+                  }`}
                 />
               </div>
               <span
-                style={{
-                  fontSize: "11px",
-                  fontWeight: "600",
-                  fontFamily: "Hind Siliguri, sans-serif",
-                  color: path === "/login" ? "#016737" : "#6B7280",
-                }}
+                className={`text-[11px] font-semibold font-bangla ${
+                  path === "/login" ? "text-primary" : "text-gray-500"
+                }`}
               >
                 লগইন
               </span>

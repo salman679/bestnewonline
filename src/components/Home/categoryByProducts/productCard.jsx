@@ -38,8 +38,16 @@ const ProductCard = ({ product }) => {
         >
           <Link to={`/products/${product.slug}`} className="block">
             <img
-              src={product.image?.[0]}
+              src={
+                product.image?.[0]?.includes("ik.imagekit.io")
+                  ? `${product.image[0]}?tr=w-300,h-300,f-webp,q-80`
+                  : product.image?.[0]
+              }
               alt={product.name}
+              width={300}
+              height={300}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
           </Link>
@@ -95,7 +103,7 @@ const ProductCard = ({ product }) => {
         <div className="p-4 max-[640px]:p-3">
           <Link to={`/products/${product.slug}`}>
             <h3
-              className="heading-3 bangla mb-2 line-clamp-2 group-hover:opacity-70 transition-opacity"
+              className="heading-3 mb-2 line-clamp-2 group-hover:opacity-70 transition-opacity"
               style={{ color: "var(--color-text-primary)", fontSize: "16px" }}
             >
               {product.name}
@@ -143,7 +151,7 @@ const ProductCard = ({ product }) => {
           {/* Add to Cart Button - Minimal */}
           <Link
             to={`/products/${product.slug}`}
-            className="btn-minimal btn-outline w-full text-center btn-text"
+            className="btn-minimal btn-outline w-full text-center btn-text bangla"
             style={{
               display: "flex",
               alignItems: "center",
@@ -156,7 +164,6 @@ const ProductCard = ({ product }) => {
               borderRadius: "9999px",
               border: "1px solid #e5e7eb",
               fontWeight: "600",
-              fontFamily: "Hind Siliguri, sans-serif",
               textDecoration: "none",
               width: "100%",
             }}

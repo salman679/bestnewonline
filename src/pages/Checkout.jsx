@@ -309,104 +309,44 @@ const Checkout = () => {
   // }
 
   return (
-    <div
-      style={{ backgroundColor: "var(--color-bg-main)", minHeight: "100vh" }}
-    >
+    <div className="bg-white min-h-screen">
       <ScrollToTop />
-      <div
-        className="container-minimal"
-        style={{
-          paddingTop: "var(--space-2xl)",
-          paddingBottom: "var(--space-2xl)",
-        }}
-      >
+      <div className="container-minimal py-12">
         {/* Order Progress Stepper - Mobile Optimized */}
-        <div className="mb-8 max-[640px]:mb-6">
+        <div className="mb-8 max-sm:mb-6">
           <div className="flex items-center justify-between max-w-md mx-auto px-4">
             {/* Step 1 - Cart */}
             <div className="flex flex-col items-center gap-2 flex-1">
-              <div
-                className="w-10 h-10 max-[640px]:w-9 max-[640px]:h-9 rounded-full flex items-center justify-center font-bold shadow-md"
-                style={{
-                  backgroundColor: "#016737",
-                  color: "white",
-                  fontSize: "14px",
-                }}
-              >
+              <div className="w-10 h-10 max-sm:w-9 max-sm:h-9 rounded-full flex items-center justify-center font-bold shadow-md bg-[#016737] text-white text-sm">
                 1
               </div>
-              <span
-                className="text-xs font-semibold text-center"
-                style={{
-                  color: "#016737",
-                  fontFamily: "Hind Siliguri, sans-serif",
-                }}
-              >
+              <span className="text-xs font-semibold text-center text-[#016737] font-bangla">
                 কার্ট
               </span>
             </div>
 
             {/* Connector Line 1 */}
-            <div
-              className="flex-1 h-1 max-[640px]:h-0.5 mx-2"
-              style={{
-                backgroundColor: "#016737",
-                maxWidth: "60px",
-              }}
-            ></div>
+            <div className="flex-1 h-1 max-sm:h-0.5 mx-2 bg-[#016737] max-w-[60px]"></div>
 
             {/* Step 2 - Checkout */}
             <div className="flex flex-col items-center gap-2 flex-1">
-              <div
-                className="w-10 h-10 max-[640px]:w-9 max-[640px]:h-9 rounded-full flex items-center justify-center font-bold shadow-md"
-                style={{
-                  backgroundColor: "#016737",
-                  color: "white",
-                  fontSize: "14px",
-                }}
-              >
+              <div className="w-10 h-10 max-sm:w-9 max-sm:h-9 rounded-full flex items-center justify-center font-bold shadow-md bg-[#016737] text-white text-sm">
                 2
               </div>
-              <span
-                className="text-xs font-semibold text-center"
-                style={{
-                  color: "#016737",
-                  fontFamily: "Hind Siliguri, sans-serif",
-                }}
-              >
+              <span className="text-xs font-semibold text-center text-[#016737] font-bangla">
                 চেকআউট
               </span>
             </div>
 
             {/* Connector Line 2 */}
-            <div
-              className="flex-1 h-1 max-[640px]:h-0.5 mx-2"
-              style={{
-                backgroundColor: "#E5E7EB",
-                maxWidth: "60px",
-              }}
-            ></div>
+            <div className="flex-1 h-1 max-sm:h-0.5 mx-2 bg-gray-200 max-w-[60px]"></div>
 
             {/* Step 3 - Confirmation */}
             <div className="flex flex-col items-center gap-2 flex-1">
-              <div
-                className="w-10 h-10 max-[640px]:w-9 max-[640px]:h-9 rounded-full flex items-center justify-center font-bold"
-                style={{
-                  backgroundColor: "#F3F4F6",
-                  color: "#9CA3AF",
-                  fontSize: "14px",
-                  border: "2px solid #E5E7EB",
-                }}
-              >
+              <div className="w-10 h-10 max-sm:w-9 max-sm:h-9 rounded-full flex items-center justify-center font-bold bg-gray-100 text-gray-400 text-sm border-2 border-gray-200">
                 3
               </div>
-              <span
-                className="text-xs font-semibold text-center"
-                style={{
-                  color: "#9CA3AF",
-                  fontFamily: "Hind Siliguri, sans-serif",
-                }}
-              >
+              <span className="text-xs font-semibold text-center text-gray-400 font-bangla">
                 নিশ্চিতকরণ
               </span>
             </div>
@@ -417,34 +357,18 @@ const Checkout = () => {
         <div className="lg:hidden mb-6">
           <div className="card-minimal p-5">
             <div className="flex items-center justify-between mb-3">
-              <h3
-                className="heading-3 bangla"
-                style={{ color: "var(--color-text-primary)" }}
-              >
+              <h3 className="heading-3 bangla text-[var(--color-text-primary)]">
                 অর্ডার সারাংশ
               </h3>
-              <span
-                className="badge-minimal"
-                style={{
-                  backgroundColor: "var(--color-bg-soft)",
-                  color: "var(--color-text-secondary)",
-                  padding: "4px 12px",
-                }}
-              >
+              <span className="badge-minimal bg-[var(--color-bg-soft)] text-[var(--color-text-secondary)] px-3">
                 {cart.length} আইটেম
               </span>
             </div>
             <div className="flex items-baseline justify-between">
-              <span
-                className="text-small bangla-text"
-                style={{ color: "var(--color-text-secondary)" }}
-              >
+              <span className="text-small bangla-text text-[var(--color-text-secondary)]">
                 মোট
               </span>
-              <span
-                className="price-text"
-                style={{ color: "var(--color-primary)", fontSize: "24px" }}
-              >
+              <span className="price-text text-primary text-2xl">
                 ৳{formatPrice(total)}
               </span>
             </div>
@@ -454,37 +378,21 @@ const Checkout = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Billing Details - Ultra Minimal */}
           <div>
-            <h2
-              className="heading-2 bangla mb-6"
-              style={{ color: "var(--color-text-primary)" }}
-            >
+            <h2 className="heading-2 bangla mb-6 text-[var(--color-text-primary)]">
               বিলিং তথ্য
             </h2>
 
             {/* Login Info Card */}
             {!user && (
-              <div
-                className="card-minimal p-4 mb-6"
-                style={{
-                  backgroundColor: "#EFF6FF",
-                  border: "1px solid #BFDBFE",
-                }}
-              >
-                <p
-                  className="text-small bangla-text mb-2"
-                  style={{ color: "#1E40AF", fontWeight: "500" }}
-                >
+              <div className="card-minimal p-4 mb-6 bg-blue-50 border border-blue-200">
+                <p className="text-small bangla-text mb-2 text-blue-800 font-medium">
                   অ্যাকাউন্ট নেই? সমস্যা নেই
                 </p>
-                <p
-                  className="text-small bangla-text"
-                  style={{ color: "#3B82F6" }}
-                >
+                <p className="text-small bangla-text text-blue-500">
                   তবে অ্যাকাউন্ট করলে অর্ডার ট্র্যাকিংসহ আরও সুবিধা পাবেন!
                   <a
                     href="/login"
-                    className="ml-1 font-medium hover:underline"
-                    style={{ color: "var(--color-primary)" }}
+                    className="ml-1 font-medium hover:underline text-primary"
                   >
                     লগইন করুন
                   </a>
@@ -496,12 +404,8 @@ const Checkout = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label
-                    className="block text-small font-medium bangla-text mb-2"
-                    style={{ color: "var(--color-text-secondary)" }}
-                  >
-                    আপনার নাম{" "}
-                    <span style={{ color: "var(--color-primary)" }}>*</span>
+                  <label className="block text-small font-medium bangla-text mb-2 text-[var(--color-text-secondary)]">
+                    আপনার নাম <span className="text-primary">*</span>
                   </label>
                   <input
                     type="text"
@@ -515,12 +419,8 @@ const Checkout = () => {
                 </div>
 
                 <div>
-                  <label
-                    className="block text-small font-medium bangla-text mb-2"
-                    style={{ color: "var(--color-text-secondary)" }}
-                  >
-                    মোবাইল নাম্বার{" "}
-                    <span style={{ color: "var(--color-primary)" }}>*</span>
+                  <label className="block text-small font-medium bangla-text mb-2 text-[var(--color-text-secondary)]">
+                    মোবাইল নাম্বার <span className="text-primary">*</span>
                   </label>
                   <input
                     type="tel"
@@ -536,12 +436,8 @@ const Checkout = () => {
               </div>
 
               <div>
-                <label
-                  className="block text-small font-medium bangla-text mb-2"
-                  style={{ color: "var(--color-text-secondary)" }}
-                >
-                  জেলা সিলেক্ট করুন{" "}
-                  <span style={{ color: "var(--color-primary)" }}>*</span>
+                <label className="block text-small font-medium bangla-text mb-2 text-[var(--color-text-secondary)]">
+                  জেলা সিলেক্ট করুন <span className="text-primary">*</span>
                 </label>
                 <select
                   name="district"
@@ -559,12 +455,8 @@ const Checkout = () => {
               </div>
 
               <div>
-                <label
-                  className="block text-small font-medium bangla-text mb-2"
-                  style={{ color: "var(--color-text-secondary)" }}
-                >
-                  সম্পূর্ণ ঠিকানা{" "}
-                  <span style={{ color: "var(--color-primary)" }}>*</span>
+                <label className="block text-small font-medium bangla-text mb-2 text-[var(--color-text-secondary)]">
+                  সম্পূর্ণ ঠিকানা <span className="text-primary">*</span>
                 </label>
                 <textarea
                   name="address"
@@ -578,10 +470,7 @@ const Checkout = () => {
               </div>
 
               <div>
-                <label
-                  className="block text-small font-medium bangla-text mb-2"
-                  style={{ color: "var(--color-text-secondary)" }}
-                >
+                <label className="block text-small font-medium bangla-text mb-2 text-[var(--color-text-secondary)]">
                   নির্দেশনা (ঐচ্ছিক)
                 </label>
                 <textarea
@@ -598,10 +487,7 @@ const Checkout = () => {
 
           {/* Order Details - Ultra Minimal */}
           <div id="cartDetails">
-            <h2
-              className="heading-2 bangla mb-6"
-              style={{ color: "var(--color-text-primary)" }}
-            >
+            <h2 className="heading-2 bangla mb-6 text-[var(--color-text-primary)]">
               অর্ডার বিবরণ
             </h2>
 
@@ -611,28 +497,14 @@ const Checkout = () => {
                 <div key={item.productId} className="card-minimal p-4">
                   <div className="flex gap-4">
                     {/* Product Image */}
-                    <div
-                      className="relative w-20 h-20 flex-shrink-0 overflow-hidden"
-                      style={{
-                        borderRadius: "var(--radius-md)",
-                        backgroundColor: "var(--color-bg-soft)",
-                      }}
-                    >
+                    <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden rounded-lg bg-[var(--color-bg-soft)]">
                       <img
                         src={item.image}
                         alt={item.name}
                         className="w-full h-full object-cover"
                       />
                       {item.discount > 0 && (
-                        <div
-                          className="badge-minimal absolute top-1 right-1"
-                          style={{
-                            backgroundColor: "var(--color-primary)",
-                            color: "white",
-                            padding: "2px 6px",
-                            fontSize: "10px",
-                          }}
-                        >
+                        <div className="badge-minimal absolute top-1 right-1 bg-primary text-white px-1.5 text-[10px]">
                           -{item.discount}%
                         </div>
                       )}
@@ -640,38 +512,19 @@ const Checkout = () => {
 
                     {/* Product Info */}
                     <div className="flex-1 min-w-0">
-                      <h3
-                        className="heading-3 bangla mb-2 truncate"
-                        style={{ color: "var(--color-text-primary)" }}
-                      >
+                      <h3 className="heading-3 bangla mb-2 truncate text-[var(--color-text-primary)]">
                         {item.name}
                       </h3>
 
                       {/* Variants */}
                       <div className="flex flex-wrap gap-2 mb-3">
                         {item.selectedColor && (
-                          <span
-                            className="badge-minimal"
-                            style={{
-                              backgroundColor: "var(--color-bg-soft)",
-                              color: "var(--color-text-secondary)",
-                              padding: "2px 8px",
-                              fontSize: "11px",
-                            }}
-                          >
+                          <span className="badge-minimal bg-[var(--color-bg-soft)] text-[var(--color-text-secondary)] px-2 text-[11px]">
                             {item.selectedColor}
                           </span>
                         )}
                         {item.selectedSize && (
-                          <span
-                            className="badge-minimal"
-                            style={{
-                              backgroundColor: "var(--color-bg-soft)",
-                              color: "var(--color-text-secondary)",
-                              padding: "2px 8px",
-                              fontSize: "11px",
-                            }}
-                          >
+                          <span className="badge-minimal bg-[var(--color-bg-soft)] text-[var(--color-text-secondary)] px-2 text-[11px]">
                             {item.selectedSize}
                           </span>
                         )}
@@ -679,10 +532,7 @@ const Checkout = () => {
 
                       {/* Quantity & Price */}
                       <div className="flex items-center justify-between">
-                        <div
-                          className="flex items-center rounded-lg overflow-hidden"
-                          style={{ border: "1px solid var(--color-border)" }}
-                        >
+                        <div className="flex items-center rounded-lg overflow-hidden border border-[var(--color-border)]">
                           <button
                             onClick={() =>
                               handleQuantityChange(
@@ -690,22 +540,11 @@ const Checkout = () => {
                                 item.quantity - 1
                               )
                             }
-                            className="px-2 py-1 transition-colors"
-                            style={{
-                              backgroundColor: "var(--color-bg-soft)",
-                              color: "var(--color-text-primary)",
-                            }}
+                            className="px-2 py-1 transition-colors bg-[var(--color-bg-soft)] text-[var(--color-text-primary)]"
                           >
                             <FaMinus className="w-3 h-3" />
                           </button>
-                          <span
-                            className="px-3 py-1 text-small font-medium"
-                            style={{
-                              color: "var(--color-text-primary)",
-                              minWidth: "40px",
-                              textAlign: "center",
-                            }}
-                          >
+                          <span className="px-3 py-1 text-small font-medium text-[var(--color-text-primary)] min-w-[40px] text-center">
                             {item.quantity}
                           </span>
                           <button
@@ -715,24 +554,14 @@ const Checkout = () => {
                                 item.quantity + 1
                               )
                             }
-                            className="px-2 py-1 transition-colors"
-                            style={{
-                              backgroundColor: "var(--color-bg-soft)",
-                              color: "var(--color-text-primary)",
-                            }}
+                            className="px-2 py-1 transition-colors bg-[var(--color-bg-soft)] text-[var(--color-text-primary)]"
                           >
                             <FaPlus className="w-3 h-3" />
                           </button>
                         </div>
 
                         <div className="text-right">
-                          <p
-                            className="price-text"
-                            style={{
-                              color: "var(--color-primary)",
-                              fontSize: "18px",
-                            }}
-                          >
+                          <p className="price-text text-primary text-lg">
                             ৳
                             {formatPrice(
                               calculateDiscountedPrice(
@@ -752,35 +581,20 @@ const Checkout = () => {
             {/* Order Summary - Ultra Minimal */}
             <div className="card-minimal p-5 mb-6">
               <div className="flex justify-between items-center mb-3">
-                <span
-                  className="text-small bangla-text"
-                  style={{ color: "var(--color-text-secondary)" }}
-                >
+                <span className="text-small bangla-text text-[var(--color-text-secondary)]">
                   সাবটোটাল
                 </span>
-                <span
-                  className="body-text font-medium"
-                  style={{ color: "var(--color-text-primary)" }}
-                >
+                <span className="body-text font-medium text-[var(--color-text-primary)]">
                   ৳{formatPrice(subtotal)}
                 </span>
               </div>
 
               <div className="flex justify-between items-center mb-4">
                 <div>
-                  <span
-                    className="text-small bangla-text"
-                    style={{ color: "var(--color-text-secondary)" }}
-                  >
+                  <span className="text-small bangla-text text-[var(--color-text-secondary)]">
                     ডেলিভারি
                   </span>
-                  <p
-                    className="text-xs bangla-text"
-                    style={{
-                      color: "var(--color-text-muted)",
-                      marginTop: "2px",
-                    }}
-                  >
+                  <p className="text-xs bangla-text text-[var(--color-text-muted)] mt-0.5">
                     (
                     {formData.district === "Dhaka"
                       ? "ঢাকার ভিতরে"
@@ -788,32 +602,17 @@ const Checkout = () => {
                     )
                   </p>
                 </div>
-                <span
-                  className="body-text font-medium"
-                  style={{ color: "var(--color-text-primary)" }}
-                >
+                <span className="body-text font-medium text-[var(--color-text-primary)]">
                   ৳{shipping}
                 </span>
               </div>
 
-              <div
-                className="pt-4"
-                style={{ borderTop: "1px solid var(--color-border)" }}
-              >
+              <div className="pt-4 border-t border-[var(--color-border)]">
                 <div className="flex justify-between items-center">
-                  <span
-                    className="heading-3 bangla"
-                    style={{ color: "var(--color-text-primary)" }}
-                  >
+                  <span className="heading-3 bangla text-[var(--color-text-primary)]">
                     মোট
                   </span>
-                  <span
-                    className="price-text"
-                    style={{
-                      color: "var(--color-primary)",
-                      fontSize: "24px",
-                    }}
-                  >
+                  <span className="price-text text-primary text-2xl">
                     ৳{formatPrice(total)}
                   </span>
                 </div>
@@ -821,41 +620,23 @@ const Checkout = () => {
             </div>
 
             {/* Payment Section - Ultra Minimal */}
-            <div
-              className="card-minimal p-5 mb-6"
-              style={{
-                backgroundColor: "#F0FDF4",
-                border: "1px solid #86EFAC",
-              }}
-            >
+            <div className="card-minimal p-5 mb-6 bg-green-50 border border-green-200">
               <div className="flex items-center gap-2 mb-4">
-                <FaMoneyBillWave
-                  className="w-5 h-5"
-                  style={{ color: "#16A34A" }}
-                />
-                <h3 className="heading-3 bangla" style={{ color: "#166534" }}>
+                <FaMoneyBillWave className="w-5 h-5 text-green-600" />
+                <h3 className="heading-3 bangla text-green-800">
                   ক্যাশ অন ডেলিভারি
                 </h3>
               </div>
               <ul className="space-y-2">
-                <li
-                  className="flex items-start gap-2 text-small bangla-text"
-                  style={{ color: "#166534" }}
-                >
+                <li className="flex items-start gap-2 text-small bangla-text text-green-800">
                   <span>✓</span>
                   <span>আমরা প্রতিশ্রুতিবদ্ধ সততা ও বিশ্বস্ততায়</span>
                 </li>
-                <li
-                  className="flex items-start gap-2 text-small bangla-text"
-                  style={{ color: "#166534" }}
-                >
+                <li className="flex items-start gap-2 text-small bangla-text text-green-800">
                   <span>✓</span>
                   <span>আগে প্রোডাক্ট যাচাই করুন, তারপর পেমেন্ট করুন</span>
                 </li>
-                <li
-                  className="flex items-start gap-2 text-small bangla-text"
-                  style={{ color: "#166534" }}
-                >
+                <li className="flex items-start gap-2 text-small bangla-text text-green-800">
                   <span>⚠️</span>
                   <span>অযৌক্তিক রিটার্নের ক্ষেত্রে গ্রাহক দায়বদ্ধ থাকবেন</span>
                 </li>
@@ -866,23 +647,7 @@ const Checkout = () => {
             <button
               onClick={handleSubmit}
               disabled={loading}
-              className="btn-minimal btn-primary w-full py-4 bangla-text btn-text transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "16px 24px",
-                minHeight: "52px",
-                backgroundColor: "#016737",
-                color: "#ffffff",
-                borderRadius: "9999px",
-                border: "none",
-                fontSize: "16px",
-                fontWeight: "600",
-                fontFamily: "Hind Siliguri, sans-serif",
-                width: "100%",
-                gap: "8px",
-              }}
+              className="btn-minimal btn-primary w-full py-4 bangla-text btn-text transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed gap-2 min-h-[52px] text-base font-semibold"
             >
               {loading ? (
                 <>
@@ -916,23 +681,18 @@ const Checkout = () => {
               )}
             </button>
 
-            <p
-              className="text-xs text-center bangla-text mt-4"
-              style={{ color: "var(--color-text-muted)" }}
-            >
+            <p className="text-xs text-center bangla-text mt-4 text-[var(--color-text-muted)]">
               অর্ডার কনফার্ম করে আপনি আমাদের{" "}
               <a
                 href="/privacy-policy"
-                className="hover:underline"
-                style={{ color: "var(--color-primary)" }}
+                className="hover:underline text-primary"
               >
                 শর্তাবলী
               </a>{" "}
               এবং{" "}
               <a
                 href="/privacy-policy"
-                className="hover:underline"
-                style={{ color: "var(--color-primary)" }}
+                className="hover:underline text-primary"
               >
                 গোপনীয়তা নীতি
               </a>{" "}

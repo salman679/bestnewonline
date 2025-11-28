@@ -1,81 +1,56 @@
 import React, { Suspense } from "react";
-
 import { Route, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-const Navbar = React.lazy(() => import("./components/Navbar"));
-import { useContext, useEffect } from "react";
-const UpdateProfile = React.lazy(() => import("./components/UpdateProfile"));
-const Footer = React.lazy(() => import("./components/Footer"));
-const ContactUs = React.lazy(() => import("./components/Contact_Us"));
-const ErrorPage = React.lazy(() => import("./components/ErrorPage"));
+import { useContext } from "react";
 import { Helmet } from "react-helmet";
-const Wishlist = React.lazy(() => import("./components/user-account/Wishlist"));
-const Register = React.lazy(() => import("./pages/auth/Register"));
-import { AuthContext } from "./context/auth/AuthContext";
-const LogIn = React.lazy(() => import("./pages/auth/LogIn"));
-const ShoppingCart = React.lazy(() =>
-  import("./components/shopping/ShoppingCart")
-);
-const ProductCategories = React.lazy(() => import("./pages/Product_Categorys"));
-const ProductDetails = React.lazy(() => import("./pages/ProductDetails"));
-const MyOrder = React.lazy(() => import("./components/user-account/My_Order"));
-const Checkout = React.lazy(() => import("./pages/Checkout"));
-const OrderConfirmation = React.lazy(() => import("./pages/OrderConfirmation"));
-const PrivateRoute = React.lazy(() =>
-  import("./components/routes/PrivateRoute")
-);
-const AdminRoute = React.lazy(() => import("./components/routes/AdminRoute"));
-const Dashboard = React.lazy(() => import("./pages/admin/Dashboard"));
-const DashboardLayout = React.lazy(() => import("./layout/DashboardLayout"));
-const AllProducts = React.lazy(() =>
-  import("./pages/admin/products/All_Products")
-);
-const ProductForm = React.lazy(() =>
-  import("./pages/admin/products/Add_Product")
-);
-const AddCategories = React.lazy(() =>
-  import("./pages/admin/categories/Add_Categories")
-);
-const EditProduct = React.lazy(() =>
-  import("./pages/admin/products/Edit_Product")
-);
-const AllOrders = React.lazy(() => import("./pages/admin/orders/AllOrders"));
-const PendingOrders = React.lazy(() =>
-  import("./pages/admin/orders/PendingOrders")
-);
-const CompletedOrders = React.lazy(() =>
-  import("./pages/admin/orders/CompletedOrders")
-);
-const Users = React.lazy(() => import("./pages/admin/users/Users"));
-const OrderManagement = React.lazy(() =>
-  import("./pages/admin/orders/OrderManagement")
-);
-const SiteAnalytics = React.lazy(() =>
-  import("./pages/admin/analytics/SiteAnalytics")
-);
-const Settings = React.lazy(() => import("./pages/admin/settings/Settings"));
-const PublicProfile = React.lazy(() => import("./components/PublicProfile"));
-const ContactMessages = React.lazy(() =>
-  import("./pages/admin/ContactMessages")
-);
-const SalesReport = React.lazy(() => import("./pages/admin/SalesReport"));
 import { FaWhatsapp } from "react-icons/fa";
-import { IndexContext } from "./context";
-const BannerManagement = React.lazy(() =>
-  import("./pages/admin/banners/BannerManagement")
-);
-const ScrollToTop = React.lazy(() => import("./components/ScrollToTop"));
-const PrivacyPolicy = React.lazy(() => import("./pages/PrivacyPolicy"));
-const PixelSetup = React.lazy(() =>
-  import("./pages/admin/settings/PixelSetUP")
-);
 
+import Navbar from "./components/Navbar";
+import UpdateProfile from "./components/UpdateProfile";
+import Footer from "./components/Footer";
+import ContactUs from "./components/Contact_Us";
+import ErrorPage from "./components/ErrorPage";
+import Wishlist from "./components/user-account/Wishlist";
+import Register from "./pages/auth/Register";
+import { AuthContext } from "./context/auth/AuthContext";
+import LogIn from "./pages/auth/LogIn";
+import ShoppingCart from "./components/shopping/ShoppingCart";
+import ProductCategories from "./pages/Product_Categorys";
+import ProductDetails from "./pages/ProductDetails";
+import MyOrder from "./components/user-account/My_Order";
+import Checkout from "./pages/Checkout";
+import OrderConfirmation from "./pages/OrderConfirmation";
+import PrivateRoute from "./components/routes/PrivateRoute";
+import AdminRoute from "./components/routes/AdminRoute";
+import Dashboard from "./pages/admin/Dashboard";
+import DashboardLayout from "./layout/DashboardLayout";
+import AllProducts from "./pages/admin/products/All_Products";
+import ProductForm from "./pages/admin/products/Add_Product";
+import AddCategories from "./pages/admin/categories/Add_Categories";
+import EditProduct from "./pages/admin/products/Edit_Product";
+import AllOrders from "./pages/admin/orders/AllOrders";
+import PendingOrders from "./pages/admin/orders/PendingOrders";
+import CompletedOrders from "./pages/admin/orders/CompletedOrders";
+import Users from "./pages/admin/users/Users";
+import OrderManagement from "./pages/admin/orders/OrderManagement";
+import SiteAnalytics from "./pages/admin/analytics/SiteAnalytics";
+import Settings from "./pages/admin/settings/Settings";
+import PublicProfile from "./components/PublicProfile";
+import ContactMessages from "./pages/admin/ContactMessages";
+import SalesReport from "./pages/admin/SalesReport";
+import BannerManagement from "./pages/admin/banners/BannerManagement";
+import ScrollToTop from "./components/ScrollToTop";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import FAQ from "./pages/FAQ";
+import DeliveryPolicy from "./pages/DeliveryPolicy";
+import ReturnPolicy from "./pages/ReturnPolicy";
+import PixelSetup from "./pages/admin/settings/PixelSetUP";
 import useFacebookPixel from "./hooks/useFacebookPixel";
 import useFetchPixel from "./hooks/useFetchPixel";
 import FacebookNoScript from "./utils/FacebookNoScript";
 import LoadingSpinner from "./components/common/LoadingSpinner";
-
-const Home = React.lazy(() => import("./pages/Home"));
+import Home from "./pages/Home";
+import { IndexContext } from "./context";
 
 const App = () => {
   const { pathname } = useLocation();
@@ -108,33 +83,70 @@ const App = () => {
   return (
     <>
       <Helmet>
+        <html lang="bn" />
         <meta charSet="utf-8" />
         <title>{pageTitle}</title>
+        <meta
+          name="description"
+          content="BuyNest - বাংলাদেশের সেরা অনলাইন শপিং প্ল্যাটফর্ম। ইসলামিক ও লাইফস্টাইল পণ্যের বিশাল কালেকশন, ১০০% অরিজিনাল গ্যারান্টি।"
+        />
         <link rel="canonical" href={pageUrl} />
 
         {/* Open Graph for social media */}
         <meta property="og:title" content={pageTitle} />
         <meta
           property="og:description"
-          content={`Explore ${formatted} at ${siteSettings?.siteName}`}
+          content={`${
+            siteSettings?.siteName || "BuyNest"
+          } - বাংলাদেশের বিশ্বস্ত অনলাইন শপ`}
         />
         <meta property="og:url" content={pageUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="./assets/buynestonline.jpg" />
+        <meta property="og:locale" content="bn_BD" />
+        <meta
+          property="og:image"
+          content="https://buynestonline.com/logo.png"
+        />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={pageTitle} />
         <meta
           name="twitter:description"
-          content={`Explore ${formatted} at ${siteSettings?.siteName}`}
+          content={`${
+            siteSettings?.siteName || "BuyNest"
+          } - বাংলাদেশের বিশ্বস্ত অনলাইন শপ`}
         />
-        <meta name="twitter:image" content="./assets/buynestonline.jpg" />
+        <meta
+          name="twitter:image"
+          content="https://buynestonline.com/logo.png"
+        />
 
         {/* Additional Metadata for SEO */}
         <meta name="robots" content="index, follow" />
-        <meta property="og:site_name" content={`${siteSettings?.siteName}`} />
-        <meta name="twitter:creator" content={`@${siteSettings?.siteName}`} />
+        <meta
+          property="og:site_name"
+          content={`${siteSettings?.siteName || "BuyNest"}`}
+        />
+        <meta
+          name="twitter:creator"
+          content={`@${siteSettings?.siteName || "BuyNest"}`}
+        />
+
+        {/* Organization Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: siteSettings?.siteName || "BuyNest",
+            url: "https://buynestonline.com",
+            logo: "https://buynestonline.com/logo.png",
+            sameAs: [
+              siteSettings?.socialMedia?.facebook || "",
+              siteSettings?.socialMedia?.instagram || "",
+            ].filter(Boolean),
+          })}
+        </script>
       </Helmet>
       <div className="sticky top-0 z-50 bg-white">
         {!isDashboard && <Navbar />}
@@ -156,6 +168,9 @@ const App = () => {
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/order-confirmation" element={<OrderConfirmation />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/delivery-policy" element={<DeliveryPolicy />} />
+            <Route path="/return-policy" element={<ReturnPolicy />} />
 
             {/* Dynamic Product Category Route */}
             <Route

@@ -287,8 +287,8 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <a
-                  href="javascript:void(0)"
+                <Link
+                  to="/product-category"
                   className="text-small transition-colors bangla-text"
                   style={{
                     color: "var(--color-text-secondary)",
@@ -296,11 +296,11 @@ const Footer = () => {
                   }}
                 >
                   অফার
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="javascript:void(0)"
+                <Link
+                  to="/product-category"
                   className="text-small transition-colors bangla-text"
                   style={{
                     color: "var(--color-text-secondary)",
@@ -308,7 +308,7 @@ const Footer = () => {
                   }}
                 >
                   নতুন আগমন
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -338,8 +338,8 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <a
-                  href="javascript:void(0)"
+                <Link
+                  to="/faq"
                   className="text-small transition-colors bangla-text"
                   style={{
                     color: "var(--color-text-secondary)",
@@ -347,11 +347,11 @@ const Footer = () => {
                   }}
                 >
                   সাধারণ প্রশ্ন
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="javascript:void(0)"
+                <Link
+                  to="/delivery-policy"
                   className="text-small transition-colors bangla-text"
                   style={{
                     color: "var(--color-text-secondary)",
@@ -359,11 +359,11 @@ const Footer = () => {
                   }}
                 >
                   ডেলিভারি নীতি
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="javascript:void(0)"
+                <Link
+                  to="/return-policy"
                   className="text-small transition-colors bangla-text"
                   style={{
                     color: "var(--color-text-secondary)",
@@ -371,7 +371,7 @@ const Footer = () => {
                   }}
                 >
                   রিটার্ন পলিসি
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 function RightSidebar({ shipping, tax, total, subtotal }) {
   return (
@@ -11,7 +11,7 @@ function RightSidebar({ shipping, tax, total, subtotal }) {
         />
         <button
           type="button"
-          className="flex items-center justify-center font-semibold tracking-wide bg-blue-600 hover:bg-blue-700 px-4 text-sm text-white"
+          className="btn-minimal btn-primary rounded-l-none px-6 text-sm"
         >
           Apply
         </button>
@@ -19,21 +19,35 @@ function RightSidebar({ shipping, tax, total, subtotal }) {
       <h3 className="text-lg font-bold border-b pb-2">Order Summary</h3>
       <ul className="mt-4 space-y-2">
         <li className="flex justify-between">
-          Subtotal: <span className="font-bold">{subtotal.toFixed(0)}<span className="text-2xl font-bold">৳</span></span>
+          Subtotal:{" "}
+          <span className="font-bold">
+            {subtotal.toFixed(0)}
+            <span className="text-2xl font-bold">৳</span>
+          </span>
         </li>
         <li className="flex justify-between">
-          Shipping: <span className="font-bold">{shipping.toFixed(0)}<span className="text-2xl font-bold">৳</span></span>
+          Shipping:{" "}
+          <span className="font-bold">
+            {shipping.toFixed(0)}
+            <span className="text-2xl font-bold">৳</span>
+          </span>
         </li>
         <li className="flex justify-between">
-          Tax: <span className="font-bold">{tax.toFixed(0)}<span className="text-2xl font-bold">৳</span></span>
+          Tax:{" "}
+          <span className="font-bold">
+            {tax.toFixed(0)}
+            <span className="text-2xl font-bold">৳</span>
+          </span>
         </li>
         <li className="flex justify-between font-bold text-lg">
-          Total: <span>{total.toFixed(0)}<span className="text-2xl font-bold">৳</span></span>
+          Total:{" "}
+          <span>
+            {total.toFixed(0)}
+            <span className="text-2xl font-bold">৳</span>
+          </span>
         </li>
       </ul>
-      <button className="bg-blue-600 text-white w-full py-2 mt-4 rounded-md">
-        Checkout
-      </button>
+      <button className="btn-minimal btn-primary w-full mt-4">Checkout</button>
     </div>
   );
 }

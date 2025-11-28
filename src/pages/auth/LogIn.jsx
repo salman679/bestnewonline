@@ -63,66 +63,25 @@ const LogIn = () => {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px",
-        backgroundColor: "#FAFAFA",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "440px",
-          backgroundColor: "#FFFFFF",
-          borderRadius: "16px",
-          border: "1px solid #F0F0F0",
-          padding: "48px 40px",
-          boxShadow: "0 8px 24px rgba(0, 0, 0, 0.06)",
-        }}
-        className="max-[640px]:p-8"
-      >
+    <div className="min-h-screen flex items-center justify-center p-6 bg-gray-50">
+      <div className="w-full max-w-[440px] bg-white rounded-2xl border border-gray-100 p-10 max-[640px]:p-8 shadow-[0_8px_24px_rgba(0,0,0,0.06)]">
         {/* Header */}
-        <div style={{ marginBottom: "32px", textAlign: "center" }}>
-          <h1
-            style={{
-              fontSize: "28px",
-              fontWeight: "600",
-              fontFamily: "Hind Siliguri, sans-serif",
-              color: "#1A1A1A",
-              marginBottom: "8px",
-            }}
-          >
+        <div className="mb-8 text-center">
+          <h1 className="text-[28px] font-semibold font-bangla text-gray-900 mb-2">
             লগইন করুন
           </h1>
-          <p
-            style={{
-              fontSize: "14px",
-              color: "#666666",
-              fontFamily: "Hind Siliguri, sans-serif",
-            }}
-          >
+          <p className="text-sm text-gray-500 font-bangla">
             আপনার অ্যাকাউন্টে প্রবেশ করুন
           </p>
         </div>
 
         {/* Login Form */}
-        <form onSubmit={handleSignIn} style={{ marginBottom: "24px" }}>
+        <form onSubmit={handleSignIn} className="mb-6">
           {/* Email Input */}
-          <div style={{ marginBottom: "20px" }}>
+          <div className="mb-5">
             <label
               htmlFor="email"
-              style={{
-                display: "block",
-                fontSize: "14px",
-                fontWeight: "500",
-                color: "#1A1A1A",
-                marginBottom: "8px",
-                fontFamily: "Inter, sans-serif",
-              }}
+              className="block text-sm font-medium text-gray-900 mb-2 font-bangla"
             >
               ইমেইল
             </label>
@@ -131,35 +90,16 @@ const LogIn = () => {
               name="email"
               type="email"
               required
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                fontSize: "14px",
-                color: "#1A1A1A",
-                backgroundColor: "#FAFAFA",
-                border: "1px solid #E8E8E8",
-                borderRadius: "8px",
-                outline: "none",
-                transition: "all 0.2s ease",
-                fontFamily: "Inter, sans-serif",
-              }}
-              className="focus:border-[#016737] focus:bg-white"
+              className="w-full px-4 py-3 text-sm text-gray-900 bg-gray-50 border border-gray-200 rounded-lg outline-none transition-all duration-200 font-sans focus:border-primary focus:bg-white"
               placeholder="your@email.com"
             />
           </div>
 
           {/* Password Input */}
-          <div style={{ marginBottom: "24px" }}>
+          <div className="mb-6">
             <label
               htmlFor="password"
-              style={{
-                display: "block",
-                fontSize: "14px",
-                fontWeight: "500",
-                color: "#1A1A1A",
-                marginBottom: "8px",
-                fontFamily: "Inter, sans-serif",
-              }}
+              className="block text-sm font-medium text-gray-900 mb-2 font-bangla"
             >
               পাসওয়ার্ড
             </label>
@@ -168,19 +108,7 @@ const LogIn = () => {
               name="password"
               type="password"
               required
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                fontSize: "14px",
-                color: "#1A1A1A",
-                backgroundColor: "#FAFAFA",
-                border: "1px solid #E8E8E8",
-                borderRadius: "8px",
-                outline: "none",
-                transition: "all 0.2s ease",
-                fontFamily: "Inter, sans-serif",
-              }}
-              className="focus:border-[#016737] focus:bg-white"
+              className="w-full px-4 py-3 text-sm text-gray-900 bg-gray-50 border border-gray-200 rounded-lg outline-none transition-all duration-200 font-sans focus:border-primary focus:bg-white"
               placeholder="••••••••"
             />
           </div>
@@ -188,92 +116,34 @@ const LogIn = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            style={{
-              width: "100%",
-              padding: "14px 24px",
-              backgroundColor: "#016737",
-              color: "#FFFFFF",
-              fontSize: "15px",
-              fontWeight: "600",
-              fontFamily: "Hind Siliguri, sans-serif",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-              transition: "all 0.2s ease",
-            }}
-            className="hover:opacity-90"
+            className="btn-minimal btn-primary w-full font-bangla"
           >
             লগইন করুন
           </button>
         </form>
 
         {/* Divider */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "16px",
-            marginBottom: "24px",
-          }}
-        >
-          <div style={{ flex: 1, height: "1px", backgroundColor: "#E8E8E8" }} />
-          <span
-            style={{
-              fontSize: "13px",
-              color: "#999999",
-              fontFamily: "Hind Siliguri, sans-serif",
-            }}
-          >
-            অথবা
-          </span>
-          <div style={{ flex: 1, height: "1px", backgroundColor: "#E8E8E8" }} />
+        <div className="flex items-center gap-4 mb-6">
+          <div className="flex-1 h-px bg-gray-200" />
+          <span className="text-[13px] text-gray-400 font-bangla">অথবা</span>
+          <div className="flex-1 h-px bg-gray-200" />
         </div>
 
         {/* Google Sign In */}
         <button
           onClick={handleGoogleSignIn}
-          style={{
-            width: "100%",
-            padding: "12px 24px",
-            backgroundColor: "#FFFFFF",
-            color: "#1A1A1A",
-            fontSize: "14px",
-            fontWeight: "500",
-            fontFamily: "Inter, sans-serif",
-            border: "1px solid #E8E8E8",
-            borderRadius: "8px",
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "8px",
-          }}
-          className="hover:bg-[#FAFAFA]"
+          className="btn-minimal btn-outline w-full flex items-center justify-center gap-2 hover:bg-gray-50"
         >
           <GoogleIcon />
           <span>Continue with Google</span>
         </button>
 
         {/* Sign Up Link */}
-        <p
-          style={{
-            textAlign: "center",
-            fontSize: "14px",
-            color: "#666666",
-            marginTop: "32px",
-            fontFamily: "Hind Siliguri, sans-serif",
-          }}
-        >
+        <p className="text-center text-sm text-gray-500 mt-8 font-bangla">
           নতুন অ্যাকাউন্ট?{" "}
           <Link
             to="/register"
-            style={{
-              color: "#016737",
-              fontWeight: "600",
-              textDecoration: "none",
-            }}
-            className="hover:underline"
+            className="text-primary font-semibold no-underline hover:underline"
           >
             রেজিস্টার করুন
           </Link>
