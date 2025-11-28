@@ -1,10 +1,9 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useContext } from "react";
 import { Helmet } from "react-helmet";
 import { FaWhatsapp } from "react-icons/fa";
-
 import Navbar from "./components/Navbar";
 import UpdateProfile from "./components/UpdateProfile";
 import Footer from "./components/Footer";
@@ -32,7 +31,9 @@ import AllOrders from "./pages/admin/orders/AllOrders";
 import PendingOrders from "./pages/admin/orders/PendingOrders";
 import CompletedOrders from "./pages/admin/orders/CompletedOrders";
 import Users from "./pages/admin/users/Users";
+import UserDetails from "./pages/admin/users/UserDetails";
 import OrderManagement from "./pages/admin/orders/OrderManagement";
+import OrderDetails from "./pages/admin/orders/OrderDetails";
 import SiteAnalytics from "./pages/admin/analytics/SiteAnalytics";
 import Settings from "./pages/admin/settings/Settings";
 import PublicProfile from "./components/PublicProfile";
@@ -217,8 +218,10 @@ const App = () => {
               <Route path="orders/pending" element={<PendingOrders />} />
               <Route path="orders/completed" element={<CompletedOrders />} />
               <Route path="orders/management" element={<OrderManagement />} />
+              <Route path="orders/details/:id" element={<OrderDetails />} />
               {/* Users */}
               <Route path="users" element={<Users />} />
+              <Route path="users/details/:id" element={<UserDetails />} />
               <Route path="contact-messages" element={<ContactMessages />} />
               <Route path="sales-report" element={<SalesReport />} />
               <Route path="facebook-pixel" element={<PixelSetup />} />
@@ -252,7 +255,7 @@ const App = () => {
       >
         <div className="absolute z-10 top-0 left-0 w-full h-full rounded-full bg-[#25d366] animate-ping"></div>
         <div className="relative z-20">
-          <FaWhatsapp className="text-white w-6 h-6" />
+          <FaWhatsapp className="w-6 h-6 text-white" />
         </div>
       </a>
       <FacebookNoScript pixelId={pixelId} />;

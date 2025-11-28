@@ -1,7 +1,19 @@
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../../../lib/axiosInstanace";
-import { FaSearch, FaUser, FaUserShield, FaEnvelope, FaPhone, FaCalendarAlt, FaEdit, FaTrash } from "react-icons/fa";
+import {
+  FaSearch,
+  FaUser,
+  FaUserShield,
+  FaEnvelope,
+  FaPhone,
+  FaCalendarAlt,
+  FaEdit,
+  FaTrash,
+  FaEye,
+} from "react-icons/fa";
 import { toast } from "react-hot-toast";
+
+import { Link } from "react-router-dom";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -10,6 +22,8 @@ const Users = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     fetchUsers();
@@ -64,10 +78,16 @@ const Users = () => {
       }
     });
 
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const currentUsers = filteredUsers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="w-12 h-12 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -75,12 +95,12 @@ const Users = () => {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
+        <div className="p-4 rounded-lg bg-red-50 dark:bg-red-900/20">
           <p className="textColor600 dark:textColor">{error}</p>
         </div>
         <button
           onClick={fetchUsers}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="px-4 py-2 mt-4 text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700"
         >
           Try Again
         </button>
@@ -88,113 +108,220 @@ const Users = () => {
     );
   }
 
-
   return (
-    <div className="p-6 max-[640px]:p-2">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4 md:mb-0">
-          Users List
-        </h1>
-        <div className="text-sm text-gray-600 dark:text-gray-400">
-          Total Users: {filteredUsers.length}
+    <div className="space-y-6 animate-fade-in">
+      {/* Header */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Users</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Manage system users and customers
+          </p>
         </div>
       </div>
 
-      {/* Filters and Search */}
-      <div className="mb-6 flex flex-col md:flex-row gap-4">
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="p-4 bg-white border border-gray-200 shadow-sm rounded-xl">
+          <p className="text-xs font-medium text-gray-500 uppercase">
+            Total Users
+          </p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">
+            {users.length}
+          </p>
+        </div>
+        <div className="p-4 bg-white border border-gray-200 shadow-sm rounded-xl">
+          <p className="text-xs font-medium text-gray-500 uppercase">
+            Customers
+          </p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">
+            {users.filter((u) => u.role !== "admin").length}
+          </p>
+        </div>
+        <div className="p-4 bg-white border border-gray-200 shadow-sm rounded-xl">
+          <p className="text-xs font-medium text-gray-500 uppercase">
+            Administrators
+          </p>
+          <p className="mt-1 text-2xl font-bold text-blue-600">
+            {users.filter((u) => u.role === "admin").length}
+          </p>
+        </div>
+      </div>
+
+      {/* Filters & Toolbar */}
+      <div className="flex flex-col gap-4 p-4 bg-white border border-gray-200 shadow-sm md:flex-row rounded-xl">
         <div className="relative flex-1">
           <input
             type="text"
-            placeholder="Search by name or email..."
+            placeholder="Search users..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+            className="w-full py-2.5 pl-10 pr-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
           />
-          <FaSearch className="absolute left-3 top-3 text-gray-400" />
+          <FaSearch className="absolute text-sm text-gray-400 -translate-y-1/2 left-3 top-1/2" />
         </div>
 
-        <select
-          value={filterRole}
-          onChange={(e) => setFilterRole(e.target.value)}
-          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-        >
-          <option value="all">All Roles</option>
-          <option value="user">Users</option>
-          <option value="admin">Admins</option>
-        </select>
+        <div className="flex gap-3">
+          <select
+            value={filterRole}
+            onChange={(e) => setFilterRole(e.target.value)}
+            className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-sm min-w-[140px]"
+          >
+            <option value="all">All Roles</option>
+            <option value="user">Customers</option>
+            <option value="admin">Admins</option>
+          </select>
 
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-        >
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-          <option value="name">Name (A-Z)</option>
-        </select>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-sm min-w-[140px]"
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="name">Name (A-Z)</option>
+          </select>
+        </div>
       </div>
 
-      {/* Users Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredUsers.map((user) => (
-          <div
-            key={user._id}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-          >
-            <div className="p-6 max-[640px]:p-3">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <div className="relative">
-                    <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                      {user.role === "admin" ? (
-                        <FaUserShield className="text-xl text-blue-500" />
-                      ) : (
-                        <FaUser className="text-xl text-gray-500" />
-                      )}
-                    </div>
-                    <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white dark:border-gray-800 ${user.role === "admin" ? "bg-blue-500" : "bg-green-500"
-                      }`}></div>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      {user.fullName}
-                    </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {user.role === "admin" ? "Administrator" : "User"}
-                    </p>
-                  </div>
-                </div>
+      {/* Users Table */}
+      <div className="overflow-hidden bg-white border border-gray-200 shadow-sm rounded-xl">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead className="border-b border-gray-200 bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 font-semibold text-gray-900">User</th>
+                <th className="px-6 py-3 font-semibold text-gray-900">Role</th>
+                <th className="px-6 py-3 font-semibold text-gray-900">
+                  Contact
+                </th>
+                <th className="px-6 py-3 font-semibold text-gray-900">
+                  Joined Date
+                </th>
+                <th className="px-6 py-3 font-semibold text-right text-gray-900">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {currentUsers.length > 0 ? (
+                currentUsers.map((user) => (
+                  <tr
+                    key={user._id}
+                    className="transition-colors hover:bg-gray-50/50"
+                  >
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full">
+                          {user.role === "admin" ? (
+                            <FaUserShield className="text-blue-600" />
+                          ) : (
+                            <FaUser className="text-gray-500" />
+                          )}
+                        </div>
+                        <div>
+                          <div className="font-medium text-gray-900">
+                            {user.fullName}
+                          </div>
+                          <div className="font-mono text-xs text-gray-500">
+                            ID: {user._id.slice(-6)}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          user.role === "admin"
+                            ? "bg-blue-100 text-blue-800"
+                            : "bg-green-100 text-green-800"
+                        }`}
+                      >
+                        {user.role === "admin" ? "Administrator" : "Customer"}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <FaEnvelope className="w-3 h-3 text-gray-400" />
+                          <span className="text-xs">{user.email}</span>
+                        </div>
+                        {user.phone && (
+                          <div className="flex items-center gap-2 text-gray-600">
+                            <FaPhone className="w-3 h-3 text-gray-400" />
+                            <span className="text-xs">{user.phone}</span>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-gray-600">
+                      {new Date(user.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Link
+                          to={`/admin-dashboard/users/details/${user._id}`}
+                          className="p-2 text-gray-500 transition-colors rounded-lg hover:text-blue-600 hover:bg-blue-50"
+                          title="View Details"
+                        >
+                          <FaEye />
+                        </Link>
+                        <button
+                          onClick={() => handleDeleteUser(user._id)}
+                          className="p-2 text-gray-500 transition-colors rounded-lg hover:text-red-600 hover:bg-red-50"
+                          title="Delete User"
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="5"
+                    className="px-6 py-12 text-center text-gray-500"
+                  >
+                    No users found matching your criteria.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
 
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
-                  <FaEnvelope className="mr-2" />
-                  <span>{user.email}</span>
-                </div>
-                <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
-                  <FaPhone className="mr-2" />
-                  <span>{user.phone || "N/A"}</span>
-                </div>
-                <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
-                  <FaCalendarAlt className="mr-2" />
-                  <span>Joined {new Date(user.createdAt).toLocaleDateString()}</span>
-                </div>
-              </div>
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 bg-gray-50">
+            <div className="text-sm text-gray-500">
+              Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+              {Math.min(currentPage * itemsPerPage, filteredUsers.length)} of{" "}
+              {filteredUsers.length} users
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              <button
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
             </div>
           </div>
-        ))}
+        )}
       </div>
-
-      {filteredUsers.length === 0 && (
-        <div className="text-center py-12">
-          <div className="text-gray-500 dark:text-gray-400">
-            No users found matching your criteria
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-export default Users; 
+export default Users;
